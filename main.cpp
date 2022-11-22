@@ -1,10 +1,10 @@
 #include <iostream>
 #include <winbgim.h>
 #include <cstring>
-#include<stdlib.h>
+#include <stdlib.h>
 using namespace std;
 
-void drawSolidLine (int x1,int y1,int x2,int y2) {
+/*void drawSolidLine (int x1,int y1,int x2,int y2) {
     setcolor(COLOR(75,205,244));
     setlinestyle(0,1,20);
     if (x1 == 400 || y1 == 300) {
@@ -37,4 +37,11 @@ int main()
     getch();
     closegraph();
     return 0;
+}*/
+
+int main()
+{
+    int a, b;
+    cin >> a >> b;
+    cout << a + b;
 }
