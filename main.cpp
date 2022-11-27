@@ -149,6 +149,7 @@ int main()
     return 0;
 }
 
+/* Daniela */
 void putImages () {
     /// primul patrat
     readimagefile("resources/1.gif",265,65,335,135); // pirat
