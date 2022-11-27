@@ -21,22 +21,22 @@ void rotateImages () {
         if (k % 4 == 0) {
             cleardevice();
             drawBoard();
-            readimagefile("../resources/p1r1.gif",195,65,405,275);
+            readimagefile("resources/p1r1.gif",195,65,405,275);
         }
         if (k % 4 == 1) {
             cleardevice();
             drawBoard();
-            readimagefile("../resources/p1r2.gif",195,65,405,275);
+            readimagefile("resources/p1r2.gif",195,65,405,275);
         }
         if (k % 4 == 2) {
             cleardevice();
             drawBoard();
-            readimagefile("../resources/p1r3.gif",195,65,405,275);
+            readimagefile("resources/p1r3.gif",195,65,405,275);
         }
         if (k % 4 == 3) {
             cleardevice();
             drawBoard();
-            readimagefile("../resources/p1r4.gif",195,65,405,275);
+            readimagefile("resources/p1r4.gif",195,65,405,275);
         }
         k++;
     }
