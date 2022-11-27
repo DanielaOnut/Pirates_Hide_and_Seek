@@ -15,15 +15,43 @@ void drawBoard () {
     bar(425,295,635,495);
 }
 
+void rotateImages () {
+    int k = 0;
+    while(getch()) {
+        if (k % 4 == 0) {
+            cleardevice();
+            drawBoard();
+            readimagefile("../resources/p1r1.gif",195,65,405,275);
+        }
+        if (k % 4 == 1) {
+            cleardevice();
+            drawBoard();
+            readimagefile("../resources/p1r2.gif",195,65,405,275);
+        }
+        if (k % 4 == 2) {
+            cleardevice();
+            drawBoard();
+            readimagefile("../resources/p1r3.gif",195,65,405,275);
+        }
+        if (k % 4 == 3) {
+            cleardevice();
+            drawBoard();
+            readimagefile("../resources/p1r4.gif",195,65,405,275);
+        }
+        k++;
+    }
+}
+
 int mat[6][6];
 
 int main()
 {
-    initwindow(900,570,"Pirates Hide and Seek");
+    initwindow(900,570,"Pirates Hide and Seek",130,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
 
     drawBoard();
+    rotateImages();
 
     getch();
     closegraph();
