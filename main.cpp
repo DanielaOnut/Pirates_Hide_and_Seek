@@ -4,6 +4,7 @@
 #include <stdlib.h>
 using namespace std;
 
+/* Daniela */
 void drawBoard () {
     setfillstyle(1,COLOR(84,197,210));
     bar (170,40,660,520);
@@ -15,6 +16,7 @@ void drawBoard () {
     bar(425,295,635,495);
 }
 
+/* Daniela */
 void rotateImages () {
     int k = 0;
     while(getch()) {
@@ -40,8 +42,88 @@ void rotateImages () {
         }
         k++;
     }
+
+    /* Denis */
+    k = 0;
+    while(getch()) {
+        if (k % 4 == 0) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p2r1.gif",195,295,405,495);
+        }
+        if (k % 4 == 1) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p2r2.gif",195,295,405,495);
+        }
+        if (k % 4 == 2) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p2r3.gif",195,295,405,495);
+        }
+        if (k % 4 == 3) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p2r4.gif",195,295,405,495);
+        }
+        k++;
+    }
+
+    /* Denis */
+    k = 0;
+    while(getch()) {
+        if (k % 4 == 0) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p3r1.gif",425,65,635,275);
+        }
+        if (k % 4 == 1) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p3r2.gif",425,65,635,275);
+        }
+        if (k % 4 == 2) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p3r3.gif",425,65,635,275);
+        }
+        if (k % 4 == 3) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p3r4.gif",425,65,635,275);
+        }
+        k++;
+    }
+
+    /* Denis */
+    k = 0;
+    while(getch()) {
+        if (k % 4 == 0) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p4r1.gif",425,295,635,495);
+        }
+        if (k % 4 == 1) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p4r2.gif",425,295,635,495);
+        }
+        if (k % 4 == 2) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p4r3.gif",425,295,635,495);
+        }
+        if (k % 4 == 3) {
+            cleardevice();
+            drawBoard();
+            readimagefile("resources/p4r4.gif",425,295,635,495);
+        }
+        k++;
+    }
+
 }
 
+/* Daniela */
 int mat[6][6];
 
 int main()
