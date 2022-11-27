@@ -54,11 +54,13 @@ void rotateImages () {
         if (k % 4 == 0) {
             cleardevice();
             drawBoard();
-            readimagefile("resources/p2r1.gif",195,295,405,495);
+            readimagefile("resources/p2r1.gif",195,295,405,495); ///pune imaginea din fisierul resources (imaginea originala) la patratul din coordonatele 195, 295, 405, 495
+            ///completeaza patratul din stanga jos
+            //Coordonatele patratului se gasesc in functia drawboard, in campurile bar
         }
         if (k % 4 == 1) {
-            cleardevice();
-            drawBoard();
+            cleardevice(); ///clears the screen in graphics mode and sets the current position to (0,0). Clearing the screen consists of filling the screen with current background color.
+            drawBoard(); ///apel la functia drawboard care deseneaza tabla in fereastra
             readimagefile("resources/p2r2.gif",195,295,405,495);
         }
         if (k % 4 == 2) {
@@ -81,6 +83,7 @@ void rotateImages () {
             cleardevice();
             drawBoard();
             readimagefile("resources/p3r1.gif",425,65,635,275);
+            ///completeaza patratul din dreapta sus
         }
         if (k % 4 == 1) {
             cleardevice();
@@ -107,6 +110,7 @@ void rotateImages () {
             cleardevice();
             drawBoard();
             readimagefile("resources/p4r1.gif",425,295,635,495);
+            ///completeaza patratul din dreapta jos
         }
         if (k % 4 == 1) {
             cleardevice();
