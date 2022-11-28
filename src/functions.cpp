@@ -3,37 +3,37 @@
 
 void putImages () {
     /// primul patrat
-    readimagefile("resources/100.gif",265,65,335,135); // pirat
-    readimagefile("resources/101.gif",335,65,400,135); // corabie
-    readimagefile("resources/102.gif",195,135,265,205); // barca
-    readimagefile("resources/103.gif",335,135,400,205); // cufar
-    readimagefile("resources/104.gif",195,205,265,275); // tentacule
+    readimagefile("./../resources/100.gif",265,65,335,135); // pirat
+    readimagefile("./../resources/101.gif",335,65,400,135); // corabie
+    readimagefile("./../resources/102.gif",195,135,265,205); // barca
+    readimagefile("./../resources/103.gif",335,135,400,205); // cufar
+    readimagefile("./../resources/104.gif",195,205,265,275); // tentacule
 
     /// al doilea patrat
-    readimagefile("resources/100.gif",425,65,495,135); // pirat
-    readimagefile("resources/105.gif",495,65,565,135); // turn
-    readimagefile("resources/102.gif",495,135,565,205); // barca
-    readimagefile("resources/103.gif",565,135,630,205); // cufar
-    readimagefile("resources/104.gif",425,205,495,275); // tentacule
-    readimagefile("resources/107.gif",495,205,565,275); // corabie pirati
+    readimagefile("./../resources/100.gif",425,65,495,135); // pirat
+    readimagefile("./../resources/105.gif",495,65,565,135); // turn
+    readimagefile("./../resources/102.gif",495,135,565,205); // barca
+    readimagefile("./../resources/103.gif",565,135,630,205); // cufar
+    readimagefile("./../resources/104.gif",425,205,495,275); // tentacule
+    readimagefile("./../resources/107.gif",495,205,565,275); // corabie pirati
 
     /// al treilea patrat
-    readimagefile("resources/100.gif",195,295,265,365); // pirat
-    readimagefile("resources/101.gif",265,295,335,365); // corabie
-    readimagefile("resources/107.gif",335,295,400,365); // corabie pirati
-    readimagefile("resources/102.gif",195,365,265,435); // barca
-    readimagefile("resources/103.gif",265,365,335,435); // cufar
-    readimagefile("resources/107.gif",195,435,265,504); // corabie pirati
-    readimagefile("resources/105.gif",265,435,335,504); // turn
-    readimagefile("resources/106.gif",335,435,400,504); // piatra
+    readimagefile("./../resources/100.gif",195,295,265,365); // pirat
+    readimagefile("./../resources/101.gif",265,295,335,365); // corabie
+    readimagefile("./../resources/107.gif",335,295,400,365); // corabie pirati
+    readimagefile("./../resources/102.gif",195,365,265,435); // barca
+    readimagefile("./../resources/103.gif",265,365,335,435); // cufar
+    readimagefile("./../resources/107.gif",195,435,265,504); // corabie pirati
+    readimagefile("./../resources/105.gif",265,435,335,504); // turn
+    readimagefile("./../resources/106.gif",335,435,400,504); // piatra
 
     /// al patrulea patrat
-    readimagefile("resources/105.gif",425,365,495,435); // turn
-    readimagefile("resources/re",495,365,565,435); // pirat
-    readimagefile("resources/106.gif",565,365,630,435); // piatra
-    readimagefile("resources/102.gif",425,435,495,504); // barca
-    readimagefile("resources/107.gif",495,435,565,504); // corabie pirati
-    readimagefile("resources/103.gif",565,435,630,504); // cufar
+    readimagefile("./../resources/105.gif",425,365,495,435); // turn
+    readimagefile("./../resources/re",495,365,565,435); // pirat
+    readimagefile("./../resources/106.gif",565,365,630,435); // piatra
+    readimagefile("./../resources/102.gif",425,435,495,504); // barca
+    readimagefile("./../resources/107.gif",495,435,565,504); // corabie pirati
+    readimagefile("./../resources/103.gif",565,435,630,504); // cufar
 }
 
 
@@ -57,22 +57,22 @@ void rotateImages () {
         if (k % 4 == 0) {
             cleardevice();
             drawBoard();
-            readimagefile("resources/p1r1.gif",195,65,405,275);
+            readimagefile("./../resources/p1r1.gif",195,65,405,275);
         }
         if (k % 4 == 1) {
             cleardevice();
             drawBoard();
-            readimagefile("resources/p1r2.gif",195,65,405,275);
+            readimagefile("./../resources/p1r2.gif",195,65,405,275);
         }
         if (k % 4 == 2) {
             cleardevice();
             drawBoard();
-            readimagefile("resources/p1r3.gif",195,65,405,275);
+            readimagefile("./../resources/p1r3.gif",195,65,405,275);
         }
         if (k % 4 == 3) {
             cleardevice();
             drawBoard();
-            readimagefile("resources/p1r4.gif",195,65,405,275);
+            readimagefile("./../resources/p1r4.gif",195,65,405,275);
         }
         k++;
     }
