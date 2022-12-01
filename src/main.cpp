@@ -7,9 +7,17 @@ using namespace std;
 ifstream fin("challenge.txt");
 
 /* Daniela */
+void initialDrawing ();
 void putImages ();
 void drawBoard ();
-void rotateImages ();
+void drawPieces (piesa & );
+piesa & clickedOnPiece ();
+const char * pieceToChar (piesa &);
+void movePiece (const char *, piesa &);
+void updatePage (const char *, int &, piesa &);
+void rotateImages (int &, int &);
+
+void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDOWN)) { delay (100);} }
 
 /* Denis */
 void matrice_challenge(int );
@@ -19,12 +27,25 @@ int mat[6][6];
 
 int main()
 {
-    initwindow(900,570,"Pirates Hide and Seek",130,50);
+    initwindow(900,570,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
 
-    drawBoard();
-    rotateImages();
+    initialDrawing();
+
+    waitForMouseClick();
+    clearmouseclick(WM_LBUTTONDOWN);
+    piesa & piece = clickedOnPiece();
+    if (piece.x1 != -1) { // am dat click pe o piesa
+        cout << "clickedOnPiece\n";
+        std::string pieceName = pieceToChar(piece);
+        while (!ismouseclick(WM_LBUTTONUP))
+            movePiece(pieceName.c_str(),piece);
+        clearmouseclick(WM_LBUTTONUP);
+    }
+
+    for (int i = 0; i < 30; ++i)
+        delete buffer[i];
 
     getch();
     closegraph();
