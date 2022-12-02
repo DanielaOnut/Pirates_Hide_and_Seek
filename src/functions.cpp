@@ -1,5 +1,9 @@
 #include <iostream>
 #include <winbgim.h>
+#include <cstring>
+#include <cstdio>
+#include <fstream>
+using namespace std;
 
 struct piesa {
     int x1, y1, x2, y2;
@@ -10,7 +14,7 @@ piesa piece3 = {720,290,830,400};
 piesa piece4 = {720,410,830,520};
 piesa emptyPiece = {-1,-1,-1,-1};
 
-const char * pieceToChar (piesa & piece) {
+const std::string pieceToChar (piesa & piece) {
     std::string pieceName;
     if (& piece == & piece1)
         pieceName.append("p1r1.gif");
@@ -20,7 +24,7 @@ const char * pieceToChar (piesa & piece) {
         pieceName.append("p3r1.gif");
     else if (& piece == & piece4)
         pieceName.append("p4r1.gif");
-    return pieceName.c_str();
+        return pieceName;
 }
 
 void * buffer[30];
@@ -194,12 +198,60 @@ void drawPieces (piesa & movablePiece) {
     }
 }
 
+void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
+{
+    ifstream fin("challenge.txt");
+    int i = 1 , a = 5, b = 75; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
+    if(x == 6 || x == 8) // pentru challenge-ul 6, 7 si 8 redimensionam pozitiile pentru a fi centrat
+    {
+        a = 35;
+        b = 105;
+    }
+    else if(x == 7)
+    {
+        a = 80;
+        b = 150;
+    }
+    char sir[20] = "./../resources/"; // in sir ne vom crea adresa imaginilor din folder-ul resources
+    char s[100];
+    while(i < x) // parcurgem liniile din fisier si le ignoram pana ajungem la cea de care avem nevoie
+    {
+        fin.get(s, 100);
+        fin.get();
+        i++;
+    }
+    fin.get(s, 100); // in s se afla linia cu challege-ul de care avem nevoie
+
+    char *p = strtok(s, " "); // folosim un strtok pentru a pune in p fiecare imagine (de ex. 101.gif)
+    while(p != NULL)
+    {
+        if(strcmp(p, "-1")!=0) // in fisier avem pun -1 ce reprezinta un patrat care se genereaza gol (ca un fel de spatiu)
+        {
+            strcat(sir,p);
+            readimagefile(sir,0,a,75,b); //punem imaginea la coordonatele corespunzatoare
+            setcolor(0); // setam culoarea negru pentru dreptunghiul in care se afla imaginile
+            rectangle(0,a,75,b); // desenam dreptunghiul
+            //cout << sir << endl;
+            a = b;
+            b += 70; //marim coordonatele cu 70px (dimensiunea aleasa pentru un patrat)
+        }
+        else{
+            a = b;
+            b += 70;
+        }
+        p = strtok(NULL, " ");
+        strcpy(sir, "./../resources/"); // reactualizam sir-ul
+    }
+
+}
+
 void updatePage (const char * image, int & page, piesa & piece) {
     setactivepage(page);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     drawBoard();
     drawPieces(piece);
+    afisare_challenge(8);
     std::string path = "./../resources/";
     path.append(image);
     readimagefile(path.c_str(),piece.x1,piece.y1,piece.x2,piece.y2);
@@ -246,8 +298,7 @@ piesa & clickedOnPiece () {
 }
 
 /* Denis */
-void matrice_challenge(int i) /// i va fi linia din matrice (pe care se afla elementele care alcatuiesc un challenge)
-{
+
     /* Legenda
     100 - butoi
     101 - corabie scufundata
@@ -293,12 +344,70 @@ void matrice_challenge(int i) /// i va fi linia din matrice (pe care se afla ele
     Challenge 10 - un castel, o corabie cu panze albe, doua cufere
                     105 102 103 103 -1 -1 -1
     */
-
-    int matrice[10][7]; ///vor fi 10 challenge-uri (10 linii) si 7 coloane (un challenge are maxim 7 elemente)
+/*
+void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
+{
+    int i = 1 , a = 5, b = 75; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
+    if(x == 6 || x == 8) // pentru challenge-ul 6, 7 si 8 redimensionam pozitiile pentru a fi centrat
     {
-        int x;
-        for(x = 1; x <= 7; x++)
-            std::cout << matrice[i][x];
+        a = 35;
+        b = 105;
+    }
+    else if(x == 7)
+    {
+        a = 80;
+        b = 150;
+    }
+    char sir[20] = "./../resources/"; // in sir ne vom crea adresa imaginilor din folder-ul resources
+    char s[100];
+    while(i < x) // parcurgem liniile din fisier si le ignoram pana ajungem la cea de care avem nevoie
+    {
+        fin.get(s, 100);
+        fin.get();
+        i++;
+    }
+    fin.get(s, 100); // in s se afla linia cu challege-ul de care avem nevoie
+
+    char *p = strtok(s, " "); // folosim un strtok pentru a pune in p fiecare imagine (de ex. 101.gif)
+    while(p != NULL)
+    {
+        if(strcmp(p, "-1")!=0) // in fisier avem pun -1 ce reprezinta un patrat care se genereaza gol (ca un fel de spatiu)
+        {
+            strcat(sir,p);
+            readimagefile(sir,0,a,75,b); //punem imaginea la coordonatele corespunzatoare
+            setcolor(0); // setam culoarea negru pentru dreptunghiul in care se afla imaginile
+            rectangle(0,a,75,b); // desenam dreptunghiul
+            //cout << sir << endl;
+            a = b;
+            b += 70; //marim coordonatele cu 70px (dimensiunea aleasa pentru un patrat)
+        }
+        else{
+            a = b;
+            b += 70;
+        }
+        p = strtok(NULL, " ");
+        strcpy(sir, "./../resources/"); // reactualizam sir-ul
     }
 
 }
+*/
+/*
+struct patrat{
+    int x1, y1, x2, y2;
+}v[5];
+
+v[1].x1 = v[2].x1 = 195;
+v[1].y1 = v[3].y1 = 65;
+v[1].x2 = v[2].x2 = 405;
+v[1].y2 = v[3].y2 = 275;
+v[2].y1 = v[4].y1 = 295;
+v[2].y2 = v[4].y2 = 505;
+v[3].x1 = v[4].x1 = 425;
+v[3].x2 = v[4].x2 = 635;
+
+bar(195,65,405,275);
+bar(195,295,405,505);
+bar(425,65,635,275);
+bar(425,295,635,505);
+
+*/

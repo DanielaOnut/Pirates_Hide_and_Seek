@@ -1,0 +1,12 @@
+-1 96.gif 107.gif 107.gif 107.gif 107.gif -1 -1
+-1 98.gif 102.gif 102.gif 102.gif 104.gif -1 -1 
+-1 96.gif 101.gif 101.gif 100.gif 100.gif 105.gif -1
+-1 98.gif 107.gif 100.gif 103.gif 104.gif 104.gif -1
+-1 -1 -1 107.gif 103.gif -1 -1 -1
+101.gif 101.gif 104.gif 107.gif 107.gif 107.gif 102.gif
+-1 107.gif 107.gif 100.gif 106.gif -1 -1 
+101.gif 104.gif 103.gif 103.gif 103.gif 105.gif 105.gif
+-1 107.gif 107.gif 102.gif 102.gif -1 -1 
+-1 105.gif 102.gif 103.gif 103.gif -1 -1 
+
+
