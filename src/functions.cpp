@@ -13,6 +13,11 @@ struct piesa {
 } piese[4];
 piesa emptyPiece = {-1,-1,-1,-1};
 
+struct patrat {
+    int x1, y1, x2, y2;
+    piesa * piesa = & emptyPiece; // retinem ce piesa e in fiecare patrat
+} patrate[4];
+
 std::string pieceToChar (piesa & piece) {
     std::string pieceName;
     pieceName.append("./../resources/p");
@@ -28,6 +33,11 @@ struct coordonate {
 }vCoord[30];
 
 void initializareCoord () {
+    // salvam coordonatele patratelor tablei
+    patrate[0] = {195,65,405,275};
+    patrate[1] = {425,65,635,275};
+    patrate[2] = {195,295,405,505};
+    patrate[3] = {425,295,635,505};
     ifstream fin("coordonateImagini.txt");
     for (int i = 0; i < 29; ++i)
         if (i < 25) {
@@ -165,7 +175,7 @@ void updatePage (const char * imagePath, int & page, piesa & piece) {
     cleardevice();
     drawBoard();
     drawPieces(piece);
-    afisare_challenge(4, 1);
+    afisare_challenge(9, 1);
     readimagefile(imagePath,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -206,6 +216,46 @@ piesa & clickedOnPiece () {
     return emptyPiece;
 }
 
+bool isPieceInSquare (piesa & piece) {
+    int index = -1; // verificam daca piesa curenta e deja intr un patrat
+    for (int i = 0; i < 4; ++i) {
+        if (patrate[i].piesa == & piece)
+            index = i; // retinem patratul in care este
+
+    }
+    // aflam coordonatele centrului piesei (piesa e 110x110)
+    int x = piece.x1 + 55, y = piece.y1 + 55;
+    for (int i = 0; i < 4; ++i)
+        if (x >= patrate[i].x1 && y >= patrate[i].y1
+            && x <= patrate[i].x2 && y <= patrate[i].y2) {
+            if (patrate[i].piesa != & emptyPiece && index != -1) { // daca in patrat e deja o piesa
+                cout << "patrat ocupat\n";
+                patrat aux = patrate[i];
+                patrate[i].piesa->x1 = patrate[index].x1;
+                patrate[i].piesa->y1 = patrate[index].y1;
+                patrate[i].piesa->x2 = patrate[index].x2;
+                patrate[i].piesa->y2 = patrate[index].y2;
+
+                patrate[index].piesa->x1 = aux.x1;
+                patrate[index].piesa->y1 = aux.y1;
+                patrate[index].piesa->x2 = aux.x2;
+                patrate[index].piesa->y2 = aux.y2;
+                swap (patrate[i].piesa,patrate[index].piesa);
+                // am interschimbat piesele pe tabla
+                return true;
+
+            }
+            if (index != -1) patrate[index].piesa = & emptyPiece;
+            piece.x1 = patrate[i].x1; piece.y1 = patrate[i].y1;
+            piece.x2 = patrate[i].x2; piece.y2 = patrate[i].y2;
+            patrate[i].piesa = & piece;
+            return true;
+        }
+//    std::cout << index + 1 << '\n';
+    patrate[index].piesa = & emptyPiece;
+    return false;
+}
+
 void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDOWN)) { delay (100);} }
 
 void mouseEvents () {
@@ -227,6 +277,12 @@ void mouseEvents () {
                 movePiece(pieceName.c_str(), piece);
             clearmouseclick(WM_LBUTTONUP);
 
+            if (isPieceInSquare(piece)) {
+//                std::cout << "inSquare\n";
+                if (page % 3 == 0)
+                    page = 1;
+                updatePage(pieceName.c_str(),page,piece);
+            }
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
@@ -234,6 +290,7 @@ void mouseEvents () {
             char * p = strchr(name,'p') + 1; // in p e adresa nr ului piesei
             char * q = strchr(name,'p') + 2;
             * q = 0; // punem null dupa adresa nr ului si salvam in mem
+            buffer[(*p - 49) + 25] = new char [imagesize(0,0,210,210)];
             getimage(piece.x1,piece.y1,piece.x2,piece.y2,buffer[(*p - 49) + 25]);
         }
         else {

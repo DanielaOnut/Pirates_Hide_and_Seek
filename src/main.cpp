@@ -11,6 +11,7 @@ void drawBoard ();
 void drawPieces (piesa & );
 piesa & clickedOnPiece ();
 std::string pieceToChar (piesa &);
+bool isPieceInSquare (piesa &);
 void movePiece (const char *, piesa &);
 void updatePage (const char *, int &, piesa &);
 void rotateImages (int &, int &);
@@ -32,12 +33,15 @@ int main()
     cleardevice();
 
     initialDrawing();
-    afisare_challenge(4, 0);
+    afisare_challenge(9, 0);
 
     mouseEvents();
 
-    for (int i = 0; i < 30; ++i)
+    for (int i = 0; i < 30; ++i) {
+        if (i < 10)
+            delete vector_imagine[i];
         delete buffer[i];
+    }
 
     getch();
     closegraph();
