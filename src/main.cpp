@@ -32,7 +32,7 @@ int main()
     cleardevice();
 
     initialDrawing();
-//    afisare_challenge(4);
+    afisare_challenge(4, 0);
 
     mouseEvents();
 

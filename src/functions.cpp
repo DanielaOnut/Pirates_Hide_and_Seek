@@ -91,16 +91,18 @@ void drawPieces (piesa & movablePiece) {
             putimage(piese[i].x1,piese[i].y1,buffer[i + 25],COPY_PUT);
 }
 
-void * ch[10];
+void * vector_imagine[10];
 
 void play_sound()
 {
     PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
 }
 
-void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
+int cont;
+void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
 {
     ifstream fin("challenge.txt");
+    if(y == 1)cont = 0;
     int i = 1 , a = 5, b = 75; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
     if(x == 6 || x == 8) // pentru challenge-ul 6, 7 si 8 redimensionam pozitiile pentru a fi centrat
     {
@@ -128,7 +130,19 @@ void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul d
         if(strcmp(p, "-1")!=0) // in fisier avem pun -1 ce reprezinta un patrat care se genereaza gol (ca un fel de spatiu)
         {
             strcat(sir,p);
-            readimagefile(sir,0,a,75,b); //punem imaginea la coordonatele corespunzatoare
+            if(y == 0)
+            {
+                vector_imagine[cont] = new char[imagesize(0,0,75,75)];
+                readimagefile(sir,0,a,75,b); //punem imaginea la coordonatele corespunzatoare
+                getimage(0,a,75,b,vector_imagine[cont]);
+                cont++;
+            }
+            else if(y == 1)
+                {
+                    putimage(0,a,vector_imagine[cont], COPY_PUT);
+                    cont++;
+                }
+
             setcolor(0); // setam culoarea negru pentru dreptunghiul in care se afla imaginile
             rectangle(0,a,75,b); // desenam dreptunghiul
             //cout << sir << endl;
@@ -151,7 +165,7 @@ void updatePage (const char * imagePath, int & page, piesa & piece) {
     cleardevice();
     drawBoard();
     drawPieces(piece);
-//    afisare_challenge(4);
+    afisare_challenge(4, 1);
     readimagefile(imagePath,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
