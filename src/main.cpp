@@ -18,12 +18,14 @@ void mouseEvents ();
 
 /* Denis */
 void afisare_challenge(int x);
+void play_sound();
 
 /* Daniela */
 int mat[6][6];
 
 int main()
 {
+    play_sound();
     initializareCoord();
     initwindow(900,570,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));

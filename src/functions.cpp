@@ -3,6 +3,8 @@
 #include <cstring>
 #include <cstdio>
 #include <fstream>
+#include <Windows.h>
+#include <mmsystem.h>
 using namespace std;
 
 struct piesa {
@@ -90,6 +92,12 @@ void drawPieces (piesa & movablePiece) {
 }
 
 void * ch[10];
+
+void play_sound()
+{
+    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+}
+
 void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
 {
     ifstream fin("challenge.txt");
