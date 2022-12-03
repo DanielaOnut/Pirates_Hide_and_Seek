@@ -14,12 +14,14 @@ std::string pieceToChar (piesa &);
 bool isPieceInSquare (piesa &);
 void movePiece (const char *, piesa &);
 void updatePage (const char *, int &, piesa &);
-void rotateImages (int &, int &);
 void mouseEvents ();
 
 /* Denis */
 void afisare_challenge(int x);
 void play_sound();
+
+/* Denis + Daniela*/
+void rotateImages(piesa &piece);
 
 /* Daniela */
 int mat[6][6];

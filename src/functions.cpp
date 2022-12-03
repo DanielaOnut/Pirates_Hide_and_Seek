@@ -10,6 +10,7 @@ using namespace std;
 struct piesa {
     int x1, y1, x2, y2;
     char pieceName[40];
+    int rotatie = 1; /// de la 1 - 4
 } piese[4];
 piesa emptyPiece = {-1,-1,-1,-1};
 
@@ -101,6 +102,7 @@ void drawPieces (piesa & movablePiece) {
             putimage(piese[i].x1,piese[i].y1,buffer[i + 25],COPY_PUT);
 }
 
+/* Denis */
 void * vector_imagine[10];
 
 void play_sound()
@@ -181,18 +183,16 @@ void updatePage (const char * imagePath, int & page, piesa & piece) {
     page++;
 }
 
-void rotateImages (int & k, int & page) {
-//    if (k % 4 == 0)
-//        updatePage("p1r1.gif",page,piece1);
-//    else if (k % 4 == 1)
-//        updatePage("p1r2.gif",page,piece1);
-//    else if (k % 4 == 2)
-//        updatePage("p1r3.gif",page,piece1);
-//    else if (k % 4 == 3) {
-//        page = 0;
-//        updatePage("p1r4.gif", page,piece1);
-//    }
-//    k++;
+void rotateImages(piesa &piece)
+{
+    piece.rotatie++;
+    if(piece.rotatie % 5 == 0)piece.rotatie = 1;
+    cout << piece.pieceName << '\n';
+    char cifra[2];
+    cifra[0] = char(piece.rotatie + 48);
+    cifra[1] = '\0';
+    strcpy(piece.pieceName + 18, cifra);
+    strcpy(piece.pieceName + 19, ".gif");
 }
 
 int page = 1;
@@ -220,7 +220,7 @@ bool isPieceInSquare (piesa & piece) {
     int index = -1; // verificam daca piesa curenta e deja intr un patrat
     for (int i = 0; i < 4; ++i) {
         if (patrate[i].piesa == & piece)
-            index = i; // retinem patratul in care este
+                index = i; // retinem patratul in care este piesa
 
     }
     // aflam coordonatele centrului piesei (piesa e 110x110)
@@ -230,6 +230,11 @@ bool isPieceInSquare (piesa & piece) {
             && x <= patrate[i].x2 && y <= patrate[i].y2) {
             if (patrate[i].piesa != & emptyPiece && index != -1) { // daca in patrat e deja o piesa
                 cout << "patrat ocupat\n";
+                if(patrate[i].piesa == patrate[index].piesa){
+                        cout << "aceeasi piesa\n";
+                        rotateImages(piece);
+                }
+
                 patrat aux = patrate[i];
                 patrate[i].piesa->x1 = patrate[index].x1;
                 patrate[i].piesa->y1 = patrate[index].y1;
@@ -278,11 +283,15 @@ void mouseEvents () {
             clearmouseclick(WM_LBUTTONUP);
 
             if (isPieceInSquare(piece)) {
-//                std::cout << "inSquare\n";
+               std::cout << "inSquare\n";
                 if (page % 3 == 0)
                     page = 1;
                 updatePage(pieceName.c_str(),page,piece);
             }
+
+            //for(int i = 0; i < 4; i++)
+                //verificare castigator
+
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
