@@ -303,27 +303,22 @@ bool isPieceInSquare (piesa & piece) {
     return false;
 }
 
-void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDOWN) && !ismouseclick(WM_RBUTTONDOWN)) { delay (100);} }
+void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
+&& !ismouseclick(WM_RBUTTONDOWN)) { delay (100);} }
 
 void mouseEvents () {
     bool pieceRotated;
     while (1) {
         pieceRotated = false;
         waitForMouseClick();
+        clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
         if (ismouseclick(WM_RBUTTONDOWN)) {
             cout << "RCLICK\n";
             pieceRotated = true;
         }
-        if (ismouseclick(WM_LBUTTONDBLCLK)) {
-            cout << "DBLCLK\n";
-            clearmouseclick(WM_LBUTTONDBLCLK);
-            while (ismouseclick(WM_LBUTTONDBLCLK)) { }
-            clearmouseclick(WM_LBUTTONDBLCLK);
-            continue;
-        }
         piesa & piece = clickedOnPiece();
-        if (piece.x1 != -1) { // am dat click pe o piesa
+        if (& piece != & emptyPiece) { // am dat click pe o piesa
             std::cout << "clickedOnPiece\n";
             while (!ismouseclick(WM_LBUTTONUP) && !pieceRotated)
                 movePiece(piece);
@@ -331,7 +326,6 @@ void mouseEvents () {
             clearmouseclick(WM_RBUTTONDOWN);
 
             if (isPieceInSquare(piece)) {
-//               std::cout << "inSquare\n";
                 if (page % 3 == 0)
                     page = 1;
                 updatePage(page,piece);

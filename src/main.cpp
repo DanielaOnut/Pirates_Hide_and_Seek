@@ -27,7 +27,7 @@ int main()
 {
     //play_sound();
     initializareCoord();
-    initwindow(900,570,"Pirates Hide and Seek",160,50);
+    initwindow(900,570,"Pirates Hide and Seek",260,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
 
