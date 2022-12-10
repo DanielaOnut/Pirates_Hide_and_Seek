@@ -10,8 +10,8 @@ void drawBoard ();
 void drawPieces (piesa & );
 piesa & clickedOnPiece ();
 bool isPieceInSquare (piesa &);
-void movePiece (const char *, piesa &);
-void updatePage (const char *, int &, piesa &);
+void movePiece (piesa &);
+void updatePage (int &, piesa &);
 void mouseEvents ();
 
 /* Denis */

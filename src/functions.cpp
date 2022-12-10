@@ -102,7 +102,7 @@ void desenare_initiala()
         }
     }
     ifstream finn("coordonateImagini.txt");
-    for(int w = 0; w < 4; w++)
+    for (int w = 0; w < 4; w++)
     {
         finn >> piese[w].pieceName;
         finn >> piese[w].x1 >> piese[w].y1 >> piese[w].x2 >> piese[w].y2;
@@ -211,14 +211,14 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 }
 
-void updatePage (const char * imagePath, int & page, piesa & piece) {
+void updatePage (int & page, piesa & piece) {
     setactivepage(page);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     drawBoard();
     drawPieces(piece);
     afisare_challenge(1, 1);
-    readimagefile(imagePath,piece.x1,piece.y1,piece.x2,piece.y2);
+    readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
 }
@@ -226,8 +226,7 @@ void updatePage (const char * imagePath, int & page, piesa & piece) {
 void rotateImages(piesa &piece)
 {
     piece.rotatie++;
-    if(piece.rotatie % 5 == 0)piece.rotatie = 1;
-    cout << piece.pieceName << '\n';
+    if (piece.rotatie % 5 == 0) piece.rotatie = 1;
     char cifra[2];
     cifra[0] = char(piece.rotatie + 48);
     cifra[1] = '\0';
@@ -236,7 +235,7 @@ void rotateImages(piesa &piece)
 }
 
 int page = 1;
-void movePiece (const char * pieceName, piesa & piece) {
+void movePiece (piesa & piece) {
     int x = mousex(), y = mousey();
     if (x - 55 < 75) // daca piesa acopera challenge urile iesi
         return;
@@ -245,8 +244,7 @@ void movePiece (const char * pieceName, piesa & piece) {
 
     if (page % 3 == 0)
         page = 1;
-    //cout << "merge si aici\n";
-    updatePage(pieceName,page,piece);
+    updatePage(page,piece);
 }
 
 piesa & clickedOnPiece () {
@@ -272,8 +270,11 @@ bool isPieceInSquare (piesa & piece) {
             if (patrate[i].piesa != & emptyPiece && index != -1) { // daca in patrat e deja o piesa
                 cout << "patrat ocupat\n";
                 if(patrate[i].piesa == patrate[index].piesa){
-                        cout << "aceeasi piesa\n";
-                        rotateImages(piece);
+                    cout << "aceeasi piesa\n";
+                    piece.x1 = patrate[i].x1; piece.y1 = patrate[i].y1;
+                    piece.x2 = patrate[i].x2; piece.y2 = patrate[i].y2;
+                    rotateImages(piece);
+                    return true;
                 }
 
                 patrat aux = patrate[i];
@@ -302,12 +303,18 @@ bool isPieceInSquare (piesa & piece) {
     return false;
 }
 
-void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDOWN)) { delay (100);} }
+void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDOWN) && !ismouseclick(WM_RBUTTONDOWN)) { delay (100);} }
 
 void mouseEvents () {
+    bool pieceRotated;
     while (1) {
+        pieceRotated = false;
         waitForMouseClick();
         clearmouseclick(WM_LBUTTONDOWN);
+        if (ismouseclick(WM_RBUTTONDOWN)) {
+            cout << "RCLICK\n";
+            pieceRotated = true;
+        }
         if (ismouseclick(WM_LBUTTONDBLCLK)) {
             cout << "DBLCLK\n";
             clearmouseclick(WM_LBUTTONDBLCLK);
@@ -318,19 +325,20 @@ void mouseEvents () {
         piesa & piece = clickedOnPiece();
         if (piece.x1 != -1) { // am dat click pe o piesa
             std::cout << "clickedOnPiece\n";
-            while (!ismouseclick(WM_LBUTTONUP))
-                movePiece(piece.pieceName, piece);
+            while (!ismouseclick(WM_LBUTTONUP) && !pieceRotated)
+                movePiece(piece);
             clearmouseclick(WM_LBUTTONUP);
+            clearmouseclick(WM_RBUTTONDOWN);
 
             if (isPieceInSquare(piece)) {
-               std::cout << "inSquare\n";
+//               std::cout << "inSquare\n";
                 if (page % 3 == 0)
                     page = 1;
-                updatePage(piece.pieceName,page,piece);
+                updatePage(page,piece);
             }
 
             //for(int i = 0; i < 4; i++)
-                //verificare castigator
+            //verificare castigator
 
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
@@ -344,6 +352,10 @@ void mouseEvents () {
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
+            if (ismouseclick(WM_RBUTTONDOWN)) {
+                clearmouseclick(WM_RBUTTONDOWN);
+                continue;
+            }
             while (!ismouseclick(WM_LBUTTONUP)) { }
             clearmouseclick(WM_LBUTTONUP);
         }
