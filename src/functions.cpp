@@ -7,6 +7,10 @@
 #include <mmsystem.h>
 using namespace std;
 
+/* Denis */
+int mat_tabla[7][7];
+
+/* Daniela */
 struct piesa {
     int x1, y1, x2, y2;
     char pieceName[40];
@@ -19,6 +23,106 @@ struct patrat {
     piesa * piesa = & emptyPiece; // retinem ce piesa e in fiecare patrat
 } patrate[4];
 
+struct coordonate {
+    int x1, y1, x2, y2;
+    char element[30];
+}vCoord[30];
+
+/* Denis */
+
+void * buffer[45]; // 45 - sunt 36 de imagini in total, dar alocam 45 sa fie loc + piesele pe langa cele 36
+void tabla_initiala()
+{
+    ifstream fin("matrice_tabla.txt");
+    setfillstyle(1,COLOR(84,197,210));
+    bar(170,40,660,530);
+    char sursa[30] = "./../resources/";
+    char gif[5] = ".gif";
+    char numar[4];
+    int i, j, p = 125, q = 5, lg = 0;
+
+    for(i = 1; i <= 6; i++)
+        for(j = 1; j <= 6; j++)
+            fin >> mat_tabla[i][j];
+    int x = 195, y = 65, z = 635, t = 505;
+    for(i = 1; i <= 6; i++)
+    {
+        for(j = 1; j <= 6; j++)
+        {
+            numar[0] = char(mat_tabla[i][j] /100) + 48;
+            numar[1] = char(mat_tabla[i][j] /10 % 10) +48;
+            numar[2] = char(mat_tabla[i][j] % 10) + 48;
+            numar[3] = '\0';
+            //cout << numar << endl;
+            strcat(sursa,numar);
+            strcat(sursa,gif);
+            if(i > 3 && j > 3)
+            {
+                buffer[lg] = new char[imagesize(0,0,70,70)];
+                readimagefile(sursa, j*70 + 20 + p,i*70 + 20 - q,j*70 + 70 + 20 + p,i*70 + 70 + 20 - q);
+                getimage(j*70 + 20 + p,i*70 + 20 - q,j*70 + 70 + 20 + p,i*70 + 70 + 20 - q, buffer[lg]);
+                vCoord[lg].x1 = j * 70 + 20 + p;
+                vCoord[lg].y1 = i * 70 + 20 - q;
+                vCoord[lg].x2 = j * 70 + 70 + 20 + p;
+                vCoord[lg].y2 = i * 70 + 70 + 20 - q;
+                strcpy(vCoord[lg].element,sursa);
+                lg++;
+            }
+            else if(i <= 3 && j > 3)
+            {
+                buffer[lg] = new char[imagesize(0,0,70,70)];
+                readimagefile(sursa, j*70 + 20 + p,i*70 - q,j*70 + 70 + 20 + p,i*70 + 70 - q);
+                getimage(j*70 + 20 + p,i*70 - q,j*70 + 70 + 20 + p,i*70 + 70 - q, buffer[lg]);
+                vCoord[lg].x1 = j*70 + 20 + p;
+                vCoord[lg].y1 = i*70 - q;
+                vCoord[lg].x2 = j*70 + 70 + 20 + p;
+                vCoord[lg].y2 = i*70 + 70 - q;
+                strcpy(vCoord[lg].element,sursa);
+                lg++;
+            }
+                    else if(i > 3 && j <= 3)
+                    {
+                        buffer[lg] = new char[imagesize(0,0,70,70)];
+                        readimagefile(sursa, j*70 + p,i*70 + 20 - q,j*70 + 70 + p,i*70 + 70 + 20 - q);
+                        getimage(j*70 + p,i*70 + 20 - q,j*70 + 70 + p,i*70 + 70 + 20 - q, buffer[lg]);
+                        vCoord[lg].x1 = j*70 + p;
+                        vCoord[lg].y1 = i*70 + 20 - q;
+                        vCoord[lg].x2 = j*70 + 70 + p;
+                        vCoord[lg].y2 = i*70 + 70 + 20 - q;
+                        strcpy(vCoord[lg].element,sursa);
+                        lg++;
+                    }
+                        else if(i <= 3 && j <= 3)
+                        {
+                            buffer[lg] = new char[imagesize(0,0,70,70)];
+                            readimagefile(sursa, j*70 + p,i*70 - q,j*70 + 70 + p,i*70 + 70 - q);
+                            getimage(j*70 + p,i*70 - q,j*70 + 70 + p,i*70 + 70 - q, buffer[lg]);
+                            vCoord[lg].x1 = j*70 + p;
+                            vCoord[lg].y1 = i*70 - q;
+                            vCoord[lg].x2 = j*70 + 70 + p;
+                            vCoord[lg].y2 = i*70 + 70 - q;
+                            strcpy(vCoord[lg].element,sursa);
+                            lg++;
+                        }
+            //cout << sursa << endl;
+            strcpy(sursa, "./../resources/");
+        }
+    }
+    ifstream finn("coordonateImagini.txt");
+    for(int w = 0; w < 4; w++)
+    {
+        finn >> piese[w].pieceName;
+        finn >> piese[w].x1 >> piese[w].y1 >> piese[w].x2 >> piese[w].y2;
+        buffer[lg] = new char[imagesize(0,0,110,110)];
+        readimagefile(piese[w].pieceName,piese[w].x1, piese[w].y1, piese[w].x2,piese[w].y2);
+        getimage(piese[w].x1, piese[w].y1, piese[w].x2,piese[w].y2, buffer[lg++]);
+        //cout << piese[w].pieceName << piese[w].x1 << piese[w].y1 << piese[w].x2 << piese[w].y2 << endl;
+    }
+
+}
+
+/* Daniela */
+
 std::string pieceToChar (piesa & piece) {
     std::string pieceName;
     pieceName.append("./../resources/p");
@@ -28,31 +132,15 @@ std::string pieceToChar (piesa & piece) {
     return pieceName;
 }
 
-struct coordonate {
-    int x1, y1, x2, y2;
-    char element[30];
-}vCoord[30];
-
 void initializareCoord () {
     // salvam coordonatele patratelor tablei
     patrate[0] = {195,65,405,275};
     patrate[1] = {425,65,635,275};
     patrate[2] = {195,295,405,505};
     patrate[3] = {425,295,635,505};
-    ifstream fin("coordonateImagini.txt");
-    for (int i = 0; i < 29; ++i)
-        if (i < 25) {
-            fin >> vCoord[i].element;
-            fin >> vCoord[i].x1 >> vCoord[i].y1 >> vCoord[i].x2 >> vCoord[i].y2;
-        }
-        else {
-            fin >> piese[i % 25].pieceName;
-            fin >> piese[i % 25].x1 >> piese[i % 25].y1 >> piese[i % 25].x2 >> piese[i % 25].y2;
-        }
-    fin.close();
+
 }
 
-void * buffer[30];
 void initialDrawing () {
     setfillstyle(1,COLOR(84,197,210));
     bar (170,40,660,530);
@@ -81,16 +169,9 @@ void drawBoard () {
     setfillstyle(1,COLOR(84,197,210));
     bar (170,40,660,530);
 
-    setfillstyle(1,COLOR(71,179,192));
-    bar(195,65,405,275);
-    bar(195,295,405,505);
-    bar(425,65,635,275);
-    bar(425,295,635,505);
-
     /// luam imaginile din memorie si le punem pe ecran
-    for (int i = 0; i < 29; ++i)
-        if (i < 25)
-            putimage (vCoord[i].x1, vCoord[i].y1,buffer[i],COPY_PUT);
+    for (int i = 0; i < 36; ++i)
+            putimage(vCoord[i].x1, vCoord[i].y1,buffer[i],COPY_PUT);
 
 }
 
@@ -99,7 +180,7 @@ void drawPieces (piesa & movablePiece) {
     // cu exceptia celei pe care s a dat click
     for (int i = 0; i < 4; ++i)
         if (& movablePiece != & piese[i])
-            putimage(piese[i].x1,piese[i].y1,buffer[i + 25],COPY_PUT);
+            putimage(piese[i].x1,piese[i].y1,buffer[i + 36],COPY_PUT);
 }
 
 /* Denis */
@@ -176,8 +257,9 @@ void updatePage (const char * imagePath, int & page, piesa & piece) {
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     drawBoard();
+    cout << "merge si aici\n";
     drawPieces(piece);
-    afisare_challenge(9, 1);
+    afisare_challenge(1, 1);
     readimagefile(imagePath,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -205,6 +287,7 @@ void movePiece (const char * pieceName, piesa & piece) {
 
     if (page % 3 == 0)
         page = 1;
+    //cout << "merge si aici\n";
     updatePage(pieceName,page,piece);
 }
 
@@ -279,7 +362,10 @@ void mouseEvents () {
             std::cout << "clickedOnPiece\n";
             std::string pieceName = pieceToChar(piece);
             while (!ismouseclick(WM_LBUTTONUP))
+            {
+               //cout << "mergeeeeeeeeee\n";
                 movePiece(pieceName.c_str(), piece);
+            }
             clearmouseclick(WM_LBUTTONUP);
 
             if (isPieceInSquare(piece)) {

@@ -19,27 +19,27 @@ void mouseEvents ();
 /* Denis */
 void afisare_challenge(int x);
 void play_sound();
+void tabla_initiala();
 
 /* Denis + Daniela*/
 void rotateImages(piesa &piece);
 
-/* Daniela */
-int mat[6][6];
 
 int main()
 {
-    play_sound();
+    //play_sound();
     initializareCoord();
     initwindow(900,570,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
 
-    initialDrawing();
-    afisare_challenge(9, 0);
+    tabla_initiala();
+    //initialDrawing();
+    afisare_challenge(1, 0);
 
     mouseEvents();
 
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < 45; ++i) {
         if (i < 10)
             delete vector_imagine[i];
         delete buffer[i];
