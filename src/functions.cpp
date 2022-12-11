@@ -114,6 +114,36 @@ void desenare_initiala()
 
 }
 
+int nrPiesa(piesa &piece)
+{
+    char name[35]; strcpy (name,piece.pieceName);
+    char * p = strchr(name,'p') + 1; // in p e adresa nr ului piesei
+    char * q = strchr(name,'p') + 2;
+    * q = 0;
+    return atoi(p);
+    //cout << p << endl;
+}
+
+void matrici_piese()
+{
+    int i, index, val, j, k;
+    for(k = 0; k < 4; k++)
+    {
+        int numar = nrPiesa(piese[k]);
+        char nume_fisier[15];
+        nume_fisier[0] = 'p';
+        nume_fisier[1] = char(k + 1 + 48);
+        strcpy(nume_fisier + 2, ".txt");
+        ifstream fin(nume_fisier);
+        index = 9 * (piese[k].rotatie - 1) + 1;
+        for(i = 1; i < index; i++)
+            fin >> val;
+        for(i = 0; i < 3; i++)
+            for(j = 0; j < 3; j++)
+                fin >> piese[k].mat[i][j];
+    }
+}
+
 /* Daniela */
 
 void initializareCoord () {
@@ -346,6 +376,7 @@ void mouseEvents () {
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
+            matrici_piese();
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
