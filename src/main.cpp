@@ -18,12 +18,12 @@ void mouseEvents ();
 void afisare_challenge(int x, int y);
 void play_sound();
 void desenare_initiala();
-void verificare_solutie();
-void completare_mat_struct();
+bool verificare_solutie(int x);
 void matrici_piese();
 
 /* Denis + Daniela*/
 void rotateImages(piesa &piece);
+int nrPiesa();
 
 
 int main()
@@ -34,7 +34,7 @@ int main()
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     desenare_initiala();
-    afisare_challenge(1, 0);
+    afisare_challenge(3, 0);
     mouseEvents();
 
     for (int i = 0; i < 45; ++i) {

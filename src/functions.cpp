@@ -34,9 +34,9 @@ struct coordonate {
 void * buffer[45]; // 45 - sunt 36 de imagini in total, dar alocam 45 sa fie loc + piesele pe langa cele 36
 void desenare_initiala()
 {
-    ifstream fin("matrice_tabla.txt");
+    ifstream fin("matrice_tabla.txt"); // iau elementele din fisier
     setfillstyle(1,COLOR(84,197,210));
-    bar(170,40,660,530);
+    bar(170,40,660,530); // creez patratul mare
     char sursa[30] = "./../resources/";
     char gif[5] = ".gif";
     char numar[4];
@@ -44,21 +44,24 @@ void desenare_initiala()
 
     for(i = 1; i <= 6; i++)
         for(j = 1; j <= 6; j++)
-            fin >> mat_tabla[i][j];
+            fin >> mat_tabla[i][j]; // imi construiesc matricea care continele toate elementele de pe tabla
     int x = 195, y = 65, z = 635, t = 505;
     for(i = 1; i <= 6; i++)
     {
         for(j = 1; j <= 6; j++)
         {
+            //in numar voi crea nr elementului (care e de 3 cifre, ex: 108)
             numar[0] = char(mat_tabla[i][j] /100) + 48;
             numar[1] = char(mat_tabla[i][j] /10 % 10) +48;
             numar[2] = char(mat_tabla[i][j] % 10) + 48;
             numar[3] = '\0';
 //            cout << numar << endl;
             strcat(sursa,numar);
-            strcat(sursa,gif);
+            strcat(sursa,gif); //creez sursa elementului
+            ///Am 4 cazuri deoarece impart tabla in 4 patrate, iar intre patrate se afla o distanta de 20px; Totodata, in p si q sunt nr de px ca tabla sa fie incadrata perfect in patratul mare
             if(i > 3 && j > 3)
             {
+                ///Pentru fiecare imagine aloc memorie in buffer, citesc imaginea si o salvez in memorie impreuna cu coordonatele sale
                 buffer[lg] = new char[imagesize(0,0,70,70)];
                 readimagefile(sursa, j*70 + 20 + p,i*70 + 20 - q,j*70 + 70 + 20 + p,i*70 + 70 + 20 - q);
                 getimage(j*70 + 20 + p,i*70 + 20 - q,j*70 + 70 + 20 + p,i*70 + 70 + 20 - q, buffer[lg]);
@@ -98,10 +101,10 @@ void desenare_initiala()
                             lg++;
                         }
             //cout << sursa << endl;
-            strcpy(sursa, "./../resources/");
+            strcpy(sursa, "./../resources/"); //resetez in sursa path-ul corect, pe parcurs el se alterneaza
         }
     }
-    ifstream finn("coordonateImagini.txt");
+    ifstream finn("coordonateImagini.txt"); //de aici iau piesele impreuna cu coordonatele lor si le salvez tot in buffer
     for (int w = 0; w < 4; w++)
     {
         finn >> piese[w].pieceName;
@@ -114,7 +117,7 @@ void desenare_initiala()
 
 }
 
-int nrPiesa(piesa &piece)
+int nrPiesa(piesa &piece) //obtin numarul piesei extragand din nume nr ei
 {
     char name[35]; strcpy (name,piece.pieceName);
     char * p = strchr(name,'p') + 1; // in p e adresa nr ului piesei
@@ -124,24 +127,90 @@ int nrPiesa(piesa &piece)
     //cout << p << endl;
 }
 
-void matrici_piese()
+void matrici_piese() //completez matricile fiecare piese in functie de rotirea pe care o are
 {
     int i, index, val, j, k;
-    for(k = 0; k < 4; k++)
+    for(k = 0; k < 4; k++) // de la 0 la 3 pentru ca sunt 4 piese in total
     {
         int numar = nrPiesa(piese[k]);
         char nume_fisier[15];
         nume_fisier[0] = 'p';
-        nume_fisier[1] = char(k + 1 + 48);
+        nume_fisier[1] = char(k + 1 + 48); ///In nume_fisier imi creez path-ul fisierului pe care  vreau sa-l deschid (sunt 4 fisiere, cate 1 per piesa)
         strcpy(nume_fisier + 2, ".txt");
         ifstream fin(nume_fisier);
-        index = 9 * (piese[k].rotatie - 1) + 1;
+        index = 9 * (piese[k].rotatie - 1) + 1; // formula e 9 * ... pentru ca matricile sunt de 3 pe 3 si eu vreau sa stiu cate elemente trebuie sa sar
         for(i = 1; i < index; i++)
-            fin >> val;
+            fin >> val; // sar elementele care nu ma intereseaza (care nu au rotatia potrivita)
         for(i = 0; i < 3; i++)
             for(j = 0; j < 3; j++)
-                fin >> piese[k].mat[i][j];
+                fin >> piese[k].mat[i][j]; //pun in mat din struct matricea corespunzatoare
     }
+}
+
+
+bool verificare_solutie(int x) // x va fi challenge-ul
+{
+    ifstream fin("solutii_challenge.txt");
+    int vect_solutii_challenge[9], vect_elemente_tabla[9]; //sunt cei 2 vectori de frecventa, unul corespunzator a ce se afla pe tabla, unul la ce ar trebui sa se afle pentru a castiga
+    int ct;
+    for(ct = 0; ct < 8; ct++) //de fiecare data reintializez toate comp. din vectori cu 0 pentru ca functia se aplica pentru fiecare incercare
+    {
+        vect_solutii_challenge[ct] = 0;
+        vect_elemente_tabla[ct] = 0;
+    }
+
+    int matrice_solutie[7][7]; ///Mai jos imi creez matricea mare a tablei conform matricilor micute din struct
+    int i, j;
+    for(i = 0; i < 3; i++)
+        for(j = 0; j < 3; j++)
+            matrice_solutie[i][j] = patrate[0].piesa -> mat[i][j];
+    for(i = 0; i < 3; i++)
+        for(j = 3; j < 6; j++)
+            matrice_solutie[i][j] = patrate[1].piesa -> mat[i][j-3];
+    for(i = 3; i < 6; i++)
+        for(j = 0; j < 3; j++)
+            matrice_solutie[i][j] = patrate[2].piesa -> mat[i-3][j];
+    for(i = 3; i < 6; i++)
+        for(j = 3; j < 6; j++)
+            matrice_solutie[i][j] = patrate[3].piesa -> mat[i-3][j-3];
+
+    int matrice_finala_solutie[7][7]; ///In matrice finala inmultesc tot ce se afla pe tabla cu matricea construita anterior, si o sa dea 0 acl unde exista piese
+    for(i = 0; i < 6; i++)
+        for(j = 0; j < 6; j++)
+            matrice_finala_solutie[i][j] = mat_tabla[i+1][j+1] * matrice_solutie[i][j]; //mat_tabla are i+1 si j+1 deoarece aceasta matrice a fost indexata de la 1, pe cand restul matricilor folosite de la 0
+
+    int y = 1, val;
+    char s[100];
+    while(y < x) ///Aici preiau din fisier solutia care ar trebui sa fie corecta pentru fiecare challenge (sar liniile care nu imi trebuie pana ajung la challenge-ul de care am nevoie)
+    {
+        fin.get(s, 100);
+        fin.get();
+        y++;
+    }
+    fin.get(s, 100); //In s am challenge-ul curent
+    char * p = strtok(s, " "); ///Sparg in cuvinte s-ul care va fi reprezentat de fiecare element din challenge
+    while(p != NULL)
+    {
+        val = atoi(p); //transform din char in int
+        vect_solutii_challenge[val-100]++; //val-100 pentru ca vectorii sunt de la 0 la 7, iar imaginile de la 100 la 107
+        p = strtok(NULL, " ");
+    }
+
+    for(i = 0; i < 6; i++)
+        for(j = 0; j < 6; j++)
+            if(matrice_finala_solutie[i][j] != 0)
+                vect_elemente_tabla[matrice_finala_solutie[i][j] - 100]++; //aici pun in vectorul ce contine el. de pe tabla elementele din matricea construita diferite de 0 (elementele care sunt vizibile pe tabla)
+
+    for(i = 0; i < 8; i++)
+        cout << vect_elemente_tabla[i] << " ";
+    cout << endl;
+    for(i = 0; i < 8; i++)
+        cout << vect_solutii_challenge[i] << " ";
+    cout << endl;
+
+    for(i = 0; i < 8; i++)
+        if(vect_elemente_tabla[i] != vect_solutii_challenge[i])return false; //compar cei doi vectori de frecventa si trag concluzia
+    return true;
 }
 
 /* Daniela */
@@ -247,7 +316,7 @@ void updatePage (int & page, piesa & piece) {
     cleardevice();
     drawBoard();
     drawPieces(piece);
-    afisare_challenge(1, 1);
+    afisare_challenge(3, 1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -377,6 +446,8 @@ void mouseEvents () {
         else {
             std::cout << "NOTclickedOnPiece\n";
             matrici_piese();
+            if(verificare_solutie(3) == 1)cout << "CHALLENGE CASTIGAT" << endl;
+            else cout << "MAI INCEARCA" << endl;
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
