@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(grafica__first_one_)
+project(Pirates_Hide_and_Seek)
 
 set(CMAKE_CXX_STANDARD 20)
 

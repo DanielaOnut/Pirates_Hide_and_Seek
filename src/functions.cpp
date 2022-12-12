@@ -11,6 +11,8 @@ using namespace std;
 int mat_tabla[7][7];
 
 /* Daniela */
+int challengeNo = 0;
+
 struct piesa {
     int x1, y1, x2, y2;
     char pieceName[40];
@@ -132,7 +134,7 @@ void matrici_piese() //completez matricile fiecare piese in functie de rotirea p
     int i, index, val, j, k;
     for(k = 0; k < 4; k++) // de la 0 la 3 pentru ca sunt 4 piese in total
     {
-        int numar = nrPiesa(piese[k]);
+//        int numar = nrPiesa(piese[k]);
         char nume_fisier[15];
         nume_fisier[0] = 'p';
         nume_fisier[1] = char(k + 1 + 48); ///In nume_fisier imi creez path-ul fisierului pe care  vreau sa-l deschid (sunt 4 fisiere, cate 1 per piesa)
@@ -342,7 +344,7 @@ void updatePage (int & page, piesa & piece) {
     cleardevice();
     drawBoard();
     drawPieces(piece);
-    afisare_challenge(3, 1);
+    afisare_challenge(challengeNo, 1);
     btn_finish(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
@@ -469,19 +471,16 @@ void mouseEvents () {
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
-            char name[20]; strcpy (name,piece.pieceName);
-            char * p = strchr(name,'p') + 1; // in p e adresa nr ului piesei
-            char * q = strchr(name,'p') + 2;
-            * q = 0; // punem null dupa adresa nr ului si salvam in mem
-            buffer[(*p - 49) + 36] = new char [imagesize(0,0,210,210)];
-            getimage(piece.x1,piece.y1,piece.x2,piece.y2,buffer[(*p - 49) + 36]);
+            int numar = nrPiesa(piece) - 1;
+            buffer[numar + 36] = new char [imagesize(0,0,210,210)];
+            getimage(piece.x1,piece.y1,piece.x2,piece.y2,buffer[numar + 36]);
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
             if(clickonFinish() == 1)
             {
             matrici_piese();
-             if(verificare_solutie(3) == 1)
+             if(verificare_solutie(challengeNo) == 1)
                 {
                     cout << "CHALLENGE CASTIGAT" << endl;
                     castigare_challenge();
