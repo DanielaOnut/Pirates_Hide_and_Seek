@@ -10,8 +10,8 @@ void drawBoard ();
 void drawPieces (piesa & );
 piesa & clickedOnPiece ();
 bool isPieceInSquare (piesa &);
-void movePiece (const char *, piesa &);
-void updatePage (const char *, int &, piesa &);
+void movePiece (piesa &);
+void updatePage (int &, piesa &);
 void mouseEvents ();
 
 /* Denis */
@@ -35,8 +35,10 @@ int main()
     initwindow(900,590,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
+
     desenare_initiala();
-    afisare_challenge(3, 0);
+    challengeNo = 9;
+    afisare_challenge(challengeNo, 0);
     btn_finish(0);
     mouseEvents();
 
