@@ -1,0 +1,44 @@
+/* Legenda
+    100 - butoi
+    101 - corabie scufundata
+    102 - corabie_panzealbe
+    103 - cufar
+    104 - caracatita
+    105 - castel
+    106 - stanca
+    107 - corabie_panzenegre
+    -1 - element vid
+    */
+    ///Nivele disponibile: Starter, Junior, Expert, Master
+    //Challenge 1 - starter
+    //Challenge 2 - starter
+    //Challenge 3 - starter
+    //Challenge 4 - starter
+    //Challenge 5 - junior
+    //Challenge 6 - junior
+    //Challenge 7 - expert
+    //Challenge 8 - expert
+    //Challenge 9 - master
+    //Challenge 10 - master
+
+    /*
+    Challenge 1 - 4 corabii cu panze negre, rosu orientat spre nord
+                    107 107 107 107 -1 -1 -1
+    Challenge 2 - 3 corabii cu panze albe si o caracatita, rosu orientat spre sud
+                    102 102 102 104 -1 -1 -1
+    Challenge 3 - 2 corabii scufundate, 2 butoaie, un castel, rosu orientat spre nord
+                    101 101 100 100 105 -1 -1
+    Challenge 4 - o corabie panza negre, un butoi, un cufar, doua caracatite, rosu orientat spre sud
+                    107 100 103 104 104 -1 -1
+    Challenge 5 - o corabie panze negre, un cufar
+                    107 103 -1 -1 -1 -1 -1
+    Challenge 6 - doua corabii scufundate, o caractita, 3 corabii cu panze negre, o corabie cu panze albe
+                    101 101 104 107 107 107 102
+    Challenge 7 - doua corabii cu panze negre, un butoi, o stanca
+                    107 107 100 106 -1 -1 -1
+    Challenge 8 - o corabie scufundata, o caracatita, trei cufere, doua castele
+                    101 104 103 103 103 105 105
+    Challenge 9 - 2 corabii cu panze negre, doua corabii cu panze albe
+                    107 107 102 102 -1 -1 -1
+    Challenge 10 - un castel, o corabie cu panze albe, doua cufere
+                    105 102 103 103 -1 -1 -1

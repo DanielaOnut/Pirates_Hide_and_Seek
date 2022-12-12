@@ -20,6 +20,8 @@ void play_sound();
 void desenare_initiala();
 bool verificare_solutie(int x);
 void matrici_piese();
+void btn_finish(int x);
+void castigare_challenge();
 
 /* Denis + Daniela*/
 void rotateImages(piesa &piece);
@@ -30,11 +32,12 @@ int main()
 {
     //play_sound();
     initializareCoord();
-    initwindow(900,570,"Pirates Hide and Seek",160,50);
+    initwindow(900,590,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     desenare_initiala();
     afisare_challenge(3, 0);
+    btn_finish(0);
     mouseEvents();
 
     for (int i = 0; i < 45; ++i) {

@@ -201,16 +201,29 @@ bool verificare_solutie(int x) // x va fi challenge-ul
             if(matrice_finala_solutie[i][j] != 0)
                 vect_elemente_tabla[matrice_finala_solutie[i][j] - 100]++; //aici pun in vectorul ce contine el. de pe tabla elementele din matricea construita diferite de 0 (elementele care sunt vizibile pe tabla)
 
+    /*
+    ///Afisare vectori de frecventa (pentru verificare)
     for(i = 0; i < 8; i++)
         cout << vect_elemente_tabla[i] << " ";
     cout << endl;
     for(i = 0; i < 8; i++)
         cout << vect_solutii_challenge[i] << " ";
     cout << endl;
+    */
 
     for(i = 0; i < 8; i++)
         if(vect_elemente_tabla[i] != vect_solutii_challenge[i])return false; //compar cei doi vectori de frecventa si trag concluzia
     return true;
+}
+
+int page = 1;
+void castigare_challenge()
+{
+    setactivepage(13);
+    cleardevice();
+    readimagefile("./../resources/congrats.gif",160,50,800,590);
+    cout << "a mers";
+    setvisualpage(13);
 }
 
 /* Daniela */
@@ -310,6 +323,19 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 }
 
+void * img_finish;
+
+void btn_finish(int x)
+{
+    if(x == 0)
+    {
+    img_finish = new char[imagesize(0, 0, 265, 114)];
+    readimagefile("./../resources/buton_finish.gif", 370, 540, 470, 580);
+    getimage(370, 540, 470, 580, img_finish);
+    }
+    else putimage(370, 540, img_finish, COPY_PUT);
+}
+
 void updatePage (int & page, piesa & piece) {
     setactivepage(page);
     setbkcolor(COLOR(247, 241, 226));
@@ -317,6 +343,7 @@ void updatePage (int & page, piesa & piece) {
     drawBoard();
     drawPieces(piece);
     afisare_challenge(3, 1);
+    btn_finish(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -333,7 +360,6 @@ void rotateImages(piesa &piece)
     strcpy(piece.pieceName + 19, ".gif");
 }
 
-int page = 1;
 void movePiece (piesa & piece) {
     int x = mousex(), y = mousey();
     if (x - 55 < 75) // daca piesa acopera challenge urile iesi
@@ -344,6 +370,13 @@ void movePiece (piesa & piece) {
     if (page % 3 == 0)
         page = 1;
     updatePage(page,piece);
+}
+
+bool clickonFinish()
+{
+    int x = mousex(), y = mousey();
+    if(x >= 370 && x <= 540 && y >= 470 && y <= 580)return true;
+    return false;
 }
 
 piesa & clickedOnPiece () {
@@ -445,9 +478,17 @@ void mouseEvents () {
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
+            if(clickonFinish() == 1)
+            {
             matrici_piese();
-            if(verificare_solutie(3) == 1)cout << "CHALLENGE CASTIGAT" << endl;
+             if(verificare_solutie(3) == 1)
+                {
+                    cout << "CHALLENGE CASTIGAT" << endl;
+                    castigare_challenge();
+                }
             else cout << "MAI INCEARCA" << endl;
+
+            }
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
@@ -457,118 +498,3 @@ void mouseEvents () {
         }
     }
 }
-
-/* Denis */
-
-    /* Legenda
-    100 - butoi
-    101 - corabie scufundata
-    102 - corabie_panzealbe
-    103 - cufar
-    104 - caracatita
-    105 - castel
-    106 - stanca
-    107 - corabie_panzenegre
-    -1 - element vid
-    */
-    ///Nivele disponibile: Starter, Junior, Expert, Master
-    //Challenge 1 - starter
-    //Challenge 2 - starter
-    //Challenge 3 - starter
-    //Challenge 4 - starter
-    //Challenge 5 - junior
-    //Challenge 6 - junior
-    //Challenge 7 - expert
-    //Challenge 8 - expert
-    //Challenge 9 - master
-    //Challenge 10 - master
-
-    /*
-    Challenge 1 - 4 corabii cu panze negre, rosu orientat spre nord
-                    107 107 107 107 -1 -1 -1
-    Challenge 2 - 3 corabii cu panze albe si o caracatita, rosu orientat spre sud
-                    102 102 102 104 -1 -1 -1
-    Challenge 3 - 2 corabii scufundate, 2 butoaie, un castel, rosu orientat spre nord
-                    101 101 100 100 105 -1 -1
-    Challenge 4 - o corabie panza negre, un butoi, un cufar, doua caracatite, rosu orientat spre sud
-                    107 100 103 104 104 -1 -1
-    Challenge 5 - o corabie panze negre, un cufar
-                    107 103 -1 -1 -1 -1 -1
-    Challenge 6 - doua corabii scufundate, o caractita, 3 corabii cu panze negre, o corabie cu panze albe
-                    101 101 104 107 107 107 102
-    Challenge 7 - doua corabii cu panze negre, un butoi, o stanca
-                    107 107 100 106 -1 -1 -1
-    Challenge 8 - o corabie scufundata, o caracatita, trei cufere, doua castele
-                    101 104 103 103 103 105 105
-    Challenge 9 - 2 corabii cu panze negre, doua corabii cu panze albe
-                    107 107 102 102 -1 -1 -1
-    Challenge 10 - un castel, o corabie cu panze albe, doua cufere
-                    105 102 103 103 -1 -1 -1
-    */
-/*
-void afisare_challenge(int x) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
-{
-    int i = 1 , a = 5, b = 75; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
-    if(x == 6 || x == 8) // pentru challenge-ul 6, 7 si 8 redimensionam pozitiile pentru a fi centrat
-    {
-        a = 35;
-        b = 105;
-    }
-    else if(x == 7)
-    {
-        a = 80;
-        b = 150;
-    }
-    char sir[20] = "./../resources/"; // in sir ne vom crea adresa imaginilor din folder-ul resources
-    char s[100];
-    while(i < x) // parcurgem liniile din fisier si le ignoram pana ajungem la cea de care avem nevoie
-    {
-        fin.get(s, 100);
-        fin.get();
-        i++;
-    }
-    fin.get(s, 100); // in s se afla linia cu challege-ul de care avem nevoie
-
-    char *p = strtok(s, " "); // folosim un strtok pentru a pune in p fiecare imagine (de ex. 101.gif)
-    while(p != NULL)
-    {
-        if(strcmp(p, "-1")!=0) // in fisier avem pun -1 ce reprezinta un patrat care se genereaza gol (ca un fel de spatiu)
-        {
-            strcat(sir,p);
-            readimagefile(sir,0,a,75,b); //punem imaginea la coordonatele corespunzatoare
-            setcolor(0); // setam culoarea negru pentru dreptunghiul in care se afla imaginile
-            rectangle(0,a,75,b); // desenam dreptunghiul
-            //cout << sir << endl;
-            a = b;
-            b += 70; //marim coordonatele cu 70px (dimensiunea aleasa pentru un patrat)
-        }
-        else{
-            a = b;
-            b += 70;
-        }
-        p = strtok(NULL, " ");
-        strcpy(sir, "./../resources/"); // reactualizam sir-ul
-    }
-
-}
-*/
-/*
-struct patrat{
-    int x1, y1, x2, y2;
-}v[5];
-
-v[1].x1 = v[2].x1 = 195;
-v[1].y1 = v[3].y1 = 65;
-v[1].x2 = v[2].x2 = 405;
-v[1].y2 = v[3].y2 = 275;
-v[2].y1 = v[4].y1 = 295;
-v[2].y2 = v[4].y2 = 505;
-v[3].x1 = v[4].x1 = 425;
-v[3].x2 = v[4].x2 = 635;
-
-bar(195,65,405,275);
-bar(195,295,405,505);
-bar(425,65,635,275);
-bar(425,295,635,505);
-
-*/
