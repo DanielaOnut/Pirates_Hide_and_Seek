@@ -35,9 +35,8 @@ int main()
     initwindow(900,590,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
-
     desenare_initiala();
-    challengeNo = 9;
+    challengeNo = 1;
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     mouseEvents();

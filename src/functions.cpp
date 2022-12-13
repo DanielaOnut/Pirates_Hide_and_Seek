@@ -36,6 +36,11 @@ struct coordonate {
 void * buffer[45]; // 45 - sunt 36 de imagini in total, dar alocam 45 sa fie loc + piesele pe langa cele 36
 void desenare_initiala()
 {
+    ///Adaugam background in memorie
+    buffer[42] = new char[imagesize(0, 0, 900, 590)];
+    readimagefile("./../resources/backgroundtest.jpg",0, 0, 900, 590);
+    getimage(0,0,900,590,buffer[42]);
+
     ifstream fin("matrice_tabla.txt"); // iau elementele din fisier
     setfillstyle(1,COLOR(84,197,210));
     bar(170,40,660,530); // creez patratul mare
@@ -223,8 +228,8 @@ void castigare_challenge()
 {
     setactivepage(13);
     cleardevice();
-    readimagefile("./../resources/congrats.gif",160,50,800,590);
-    cout << "a mers";
+    readimagefile("./../resources/congrats.gif",0, 0, 900, 590);
+    //cout << "a mers";
     setvisualpage(13);
 }
 
@@ -340,8 +345,8 @@ void btn_finish(int x)
 
 void updatePage (int & page, piesa & piece) {
     setactivepage(page);
-    setbkcolor(COLOR(247, 241, 226));
     cleardevice();
+    putimage(0,0,buffer[42],COPY_PUT);
     drawBoard();
     drawPieces(piece);
     afisare_challenge(challengeNo, 1);
