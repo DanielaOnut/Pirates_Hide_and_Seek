@@ -228,7 +228,7 @@ void castigare_challenge()
 {
     setactivepage(13);
     cleardevice();
-    readimagefile("./../resources/congrats.gif",0, 0, 900, 590);
+    readimagefile("./../resources/congrats.jpg",0, 0, 900, 590);
     //cout << "a mers";
     setvisualpage(13);
 }

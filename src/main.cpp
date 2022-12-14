@@ -38,7 +38,7 @@ int main()
     cleardevice();
 
     desenare_initiala();
-    challengeNo = 42;
+    challengeNo = 1;
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     mouseEvents();
