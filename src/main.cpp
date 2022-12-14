@@ -9,7 +9,7 @@ void initializareCoord ();
 void drawBoard ();
 void drawPieces (piesa & );
 piesa & clickedOnPiece ();
-bool isPieceInSquare (piesa &);
+std::string isPieceInSquare (piesa &);
 void movePiece (piesa &);
 void updatePage (int &, piesa &);
 void mouseEvents ();
@@ -24,9 +24,9 @@ void btn_finish(int x);
 void castigare_challenge();
 int redimensionare_img_ch(char s[]);
 
-/* Denis + Daniela*/
+/* Denis + Daniela */
 void rotateImages(piesa &piece);
-int nrPiesa();
+int nrPiesa(piesa &);
 
 
 int main()
@@ -36,6 +36,7 @@ int main()
     initwindow(900,590,"Pirates Hide and Seek",160,50);
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
+
     desenare_initiala();
     challengeNo = 42;
     afisare_challenge(challengeNo, 0);

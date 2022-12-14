@@ -416,7 +416,7 @@ piesa & clickedOnPiece () {
     return emptyPiece;
 }
 
-bool isPieceInSquare (piesa & piece) {
+std::string isPieceInSquare (piesa & piece) {
     int index = -1; // verificam daca piesa curenta e deja intr un patrat
     for (int i = 0; i < 4; ++i) {
         if (patrate[i].piesa == & piece)
@@ -435,7 +435,7 @@ bool isPieceInSquare (piesa & piece) {
                     piece.x1 = patrate[i].x1; piece.y1 = patrate[i].y1;
                     piece.x2 = patrate[i].x2; piece.y2 = patrate[i].y2;
                     rotateImages(piece);
-                    return true;
+                    return "rotation";
                 }
 
                 patrat aux = patrate[i];
@@ -450,18 +450,20 @@ bool isPieceInSquare (piesa & piece) {
                 patrate[index].piesa->y2 = aux.y2;
                 swap (patrate[i].piesa,patrate[index].piesa);
                 // am interschimbat piesele pe tabla
-                return true;
+                return "inSquare";
 
             }
+            if (patrate[i].piesa != & emptyPiece && index == -1)
+                return "overlapping";
+
             if (index != -1) patrate[index].piesa = & emptyPiece;
             piece.x1 = patrate[i].x1; piece.y1 = patrate[i].y1;
             piece.x2 = patrate[i].x2; piece.y2 = patrate[i].y2;
             patrate[i].piesa = & piece;
-            return true;
+            return "inSquare";
         }
-//    std::cout << index + 1 << '\n';
     patrate[index].piesa = & emptyPiece;
-    return false;
+    return "notInSquare";
 }
 
 void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
@@ -481,16 +483,18 @@ void mouseEvents () {
         piesa & piece = clickedOnPiece();
         if (& piece != & emptyPiece) { // am dat click pe o piesa
             std::cout << "clickedOnPiece\n";
+            piesa initialPos = piece;
             while (!ismouseclick(WM_LBUTTONUP) && !pieceRotated)
                 movePiece(piece);
             clearmouseclick(WM_LBUTTONUP);
             clearmouseclick(WM_RBUTTONDOWN);
 
-            if (isPieceInSquare(piece)) {
-                if (page % 3 == 0)
-                    page = 1;
-                updatePage(page,piece);
-            }
+            std::string res = isPieceInSquare(piece);
+            if (res == "overlapping")
+                piece = initialPos;
+            if (page % 3 == 0)
+                page = 1;
+            updatePage(page,piece);
 
             //for(int i = 0; i < 4; i++)
             //verificare castigator
