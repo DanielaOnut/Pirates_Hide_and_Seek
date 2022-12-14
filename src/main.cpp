@@ -22,6 +22,7 @@ bool verificare_solutie(int x);
 void matrici_piese();
 void btn_finish(int x);
 void castigare_challenge();
+int redimensionare_img_ch(char s[]);
 
 /* Denis + Daniela*/
 void rotateImages(piesa &piece);
@@ -36,7 +37,7 @@ int main()
     setbkcolor(COLOR(247, 241, 226));
     cleardevice();
     desenare_initiala();
-    challengeNo = 1;
+    challengeNo = 42;
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     mouseEvents();

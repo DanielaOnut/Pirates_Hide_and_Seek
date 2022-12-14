@@ -269,22 +269,33 @@ void play_sound()
 //    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
 }
 
+int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si returneaza cate elemente are challenge-ul pentru a le centra
+{
+    char s_copie[100]; //facem copie pentru ca daca lucram pe s, dupa strtok s va deveni null
+    strcpy(s_copie,s);
+    int i = 0;
+    char *p = strtok(s_copie, " ");
+    while(p != NULL)
+    {
+        if(strcmp(p,"-1")!= 0)
+                i++;
+        p = strtok(NULL, " ");
+    }
+    return i;
+}
+
+struct dimensiuni{ //in acest struct vom pune pune coordonatele pieselor
+    int a, b;
+}vect[9];
+
+int k = 0;
 int cont;
 void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challenge-ul din partea dreapta in functie de butonul apasat(x)
 {
     ifstream fin("challenge.txt");
+    ifstream finn("dimensiuni.txt");
     if(y == 1)cont = 0;
-    int i = 1 , a = 5, b = 75; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
-    if(x == 6 || x == 8) // pentru challenge-ul 6, 7 si 8 redimensionam pozitiile pentru a fi centrat
-    {
-        a = 35;
-        b = 105;
-    }
-    else if(x == 7)
-    {
-        a = 80;
-        b = 150;
-    }
+    int i = 1 , a, b; // i - index pentru liniile din fisier, a, b - coordonatele care se schimba din 70 in 70 pentru fiecare patrat
     char sir[20] = "./../resources/"; // in sir ne vom crea adresa imaginilor din folder-ul resources
     char s[100];
     while(i < x) // parcurgem liniile din fisier si le ignoram pana ajungem la cea de care avem nevoie
@@ -295,12 +306,23 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
     }
     fin.get(s, 100); // in s se afla linia cu challege-ul de care avem nevoie
 
+    if(y == 0) //daca sunt la prima intrare in challenge
+        for(k = 1; k <= 8; k++) //parcurg fisierul cu dimensiuni si il pun in struct
+            {
+                finn >> vect[k].a;
+                finn >> vect[k].b;
+            }
+    k = redimensionare_img_ch(s); // pun in k numarul de elemente din challenge
+    a = vect[k].a; //initializez coordonatele lui a si b in functie de ce se afla in fisier pentru nr. respectiv de elemente
+    b = vect[k].b;
+
     char *p = strtok(s, " "); // folosim un strtok pentru a pune in p fiecare imagine (de ex. 101.gif)
     while(p != NULL)
     {
         if(strcmp(p, "-1")!=0) // in fisier avem pun -1 ce reprezinta un patrat care se genereaza gol (ca un fel de spatiu)
         {
             strcat(sir,p);
+            strcat(sir,".gif");
             if(y == 0)
             {
                 vector_imagine[cont] = new char[imagesize(0,0,75,75)];
