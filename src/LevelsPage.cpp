@@ -42,7 +42,7 @@ LevelsPage::LevelsPage() {
 
 int LevelsPage::clickedOnLevel() {
     int x = mousex(), y = mousey();
-    for (int i = 0; i < 60; ++i) {
+    for (int i = 0; i <= 60; ++i) {
         if (x >= this->levelButtons[i].x1 && x <= this->levelButtons[i].x2
             && y >= this->levelButtons[i].y1 && y <= this->levelButtons[i].y2)
             return this->levelButtons[i].level;
@@ -61,8 +61,12 @@ void LevelsPage::mouseEvents () {
             this->draw(); // daca am ajuns aici s a terminat jocul
             return;
         }
-        else
+        else {
+            clearmouseclick(WM_LBUTTONDBLCLK);
+            clearmouseclick(WM_RBUTTONDBLCLK);
             clearmouseclick(WM_LBUTTONDOWN);
+            clearmouseclick(WM_RBUTTONDOWN);
+        }
     }
 }
 

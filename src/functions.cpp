@@ -450,7 +450,6 @@ void rotateImages(piesa &piece)
     cifra[1] = '\0';
     strcpy(piece.pieceName + 18, cifra);
     strcpy(piece.pieceName + 19, ".gif");
-    Beep(50,50);
 }
 
 void movePiece (piesa & piece) {

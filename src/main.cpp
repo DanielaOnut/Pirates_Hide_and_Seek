@@ -39,6 +39,7 @@ int nrPiesa(piesa &);
 int main()
 {
     initwindow(900,590,"Pirates Hide and Seek",160,50);
+
     LevelsPage levelsPage;
     levelsPage.mouseEvents();
     btn_snd();
