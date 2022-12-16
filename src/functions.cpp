@@ -224,7 +224,8 @@ bool verificare_solutie(int x) // x va fi challenge-ul
     return true;
 }
 
-int page = 1;
+int page;
+bool gameWon;
 void castigare_challenge()
 {
     setactivepage(3);
@@ -236,15 +237,6 @@ void castigare_challenge()
 }
 
 /* Daniela */
-
-void initializareCoord () {
-    // salvam coordonatele patratelor tablei
-    patrate[0] = {195,65,405,275};
-    patrate[1] = {425,65,635,275};
-    patrate[2] = {195,295,405,505};
-    patrate[3] = {425,295,635,505};
-
-}
 
 void drawBoard () {
     setfillstyle(1,COLOR(84,197,210));
@@ -268,7 +260,7 @@ void * vector_imagine[10];
 
 void play_sound()
 {
-    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+//    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
 }
 
 int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si returneaza cate elemente are challenge-ul pentru a le centra
@@ -367,12 +359,13 @@ void btn_finish(int x)
     else putimage(370, 540, img_finish, COPY_PUT);
 }
 
-void clickonBACK(int last_page)
+bool clickonBACK()
 {
     int x = mousex(), y = mousey();
-    if(getvisualpage() > 2)
+    if(gameWon)
         if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
-            setvisualpage(last_page);
+            return true;
+    return false;
             /*cout << getvisualpage() << " APASARE BACK" << endl;
     cout << getvisualpage() << " APASARE BACK" << endl;
     rectangle(10, 520, 110, 575);*/
@@ -491,6 +484,11 @@ void mouseEvents () {
         waitForMouseClick();
         clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
+        if (gameWon) {
+            if (clickonBACK())
+                return;
+            continue;
+        }
         if (ismouseclick(WM_RBUTTONDOWN)) {
             cout << "RCLICK\n";
             pieceRotated = true;
@@ -509,17 +507,16 @@ void mouseEvents () {
                 piece = initialPos;
             if (page % 3 == 0)
                 page = 1;
-            updatePage(page,piece);
-
-            //for(int i = 0; i < 4; i++)
-            //verificare castigator
+            updatePage(page, piece);
 
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
-            int numar = nrPiesa(piece) - 1;
-            buffer[numar + 36] = new char [imagesize(0,0,210,210)];
-            getimage(piece.x1,piece.y1,piece.x2,piece.y2,buffer[numar + 36]);
+            for (int i = 0; i < 4; ++i) {
+                int numar = nrPiesa(piese[i]) - 1;
+                buffer[numar + 36] = new char[imagesize(0, 0, 210, 210)];
+                getimage(piese[i].x1, piese[i].y1, piese[i].x2, piese[i].y2, buffer[numar + 36]);
+            }
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
@@ -528,17 +525,18 @@ void mouseEvents () {
             if(strlen(patrate[0].piesa -> pieceName) != 0 && strlen(patrate[1].piesa -> pieceName) != 0 && strlen(patrate[2].piesa -> pieceName) != 0 && strlen(patrate[3].piesa -> pieceName) != 0)
             //cout << (strlen(patrate[2].piesa ->pieceName) == 0) << " ex" << endl;
             {
-            matrici_piese();
-             if(verificare_solutie(challengeNo) == 1)
-                {
-                    cout << "CHALLENGE CASTIGAT" << endl;
-                    castigare_challenge();
-                }
-            else cout << "MAI INCEARCA" << endl;
+                matrici_piese();
+                 if(verificare_solutie(challengeNo) == 1)
+                    {
+                        cout << "CHALLENGE CASTIGAT" << endl;
+                        castigare_challenge();
+                        gameWon = true;
+                        continue;
+                    }
+                 else cout << "MAI INCEARCA" << endl;
             }
             else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
 
-            clickonBACK(last_page);
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
@@ -547,4 +545,31 @@ void mouseEvents () {
             clearmouseclick(WM_LBUTTONUP);
         }
     }
+}
+
+void initializareValori () {
+    // salvam coordonatele patratelor tablei
+    patrate[0] = {195,65,405,275};
+    patrate[1] = {425,65,635,275};
+    patrate[2] = {195,295,405,505};
+    patrate[3] = {425,295,635,505};
+
+    char sir[20] = "r1.gif";
+    for (int i = 0; i < 4; ++i) {
+        patrate[i].piesa = & emptyPiece;
+        strcpy(piese[i].pieceName + 17,sir);
+        piese[i].rotatie = 1;
+    }
+
+    gameWon = false; page = 2; k = 0;
+    cont = 0;
+}
+
+void start_game (int level) {
+    challengeNo = level;
+    initializareValori();
+    desenare_initiala();
+    afisare_challenge(challengeNo, 0);
+    btn_finish(0);
+    mouseEvents();
 }
