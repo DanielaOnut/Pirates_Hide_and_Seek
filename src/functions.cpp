@@ -9,6 +9,7 @@ using namespace std;
 
 /* Denis */
 int mat_tabla[7][7];
+int last_page;
 
 /* Daniela */
 int challengeNo = 0;
@@ -226,11 +227,12 @@ bool verificare_solutie(int x) // x va fi challenge-ul
 int page = 1;
 void castigare_challenge()
 {
-    setactivepage(13);
+    setactivepage(3);
     cleardevice();
-    readimagefile("./../resources/congrats.jpg",0, 0, 900, 590);
+    readimagefile("./../resources/congrats.gif",0, 0, 900, 590);
     //cout << "a mers";
-    setvisualpage(13);
+    setvisualpage(3);
+    //cout << getvisualpage() << " uite " << endl;
 }
 
 /* Daniela */
@@ -266,7 +268,7 @@ void * vector_imagine[10];
 
 void play_sound()
 {
-//    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
 }
 
 int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si returneaza cate elemente are challenge-ul pentru a le centra
@@ -365,6 +367,18 @@ void btn_finish(int x)
     else putimage(370, 540, img_finish, COPY_PUT);
 }
 
+void clickonBACK(int last_page)
+{
+    int x = mousex(), y = mousey();
+    if(getvisualpage() > 2)
+        if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
+            setvisualpage(last_page);
+            /*cout << getvisualpage() << " APASARE BACK" << endl;
+    cout << getvisualpage() << " APASARE BACK" << endl;
+    rectangle(10, 520, 110, 575);*/
+
+}
+
 void updatePage (int & page, piesa & piece) {
     setactivepage(page);
     cleardevice();
@@ -375,6 +389,7 @@ void updatePage (int & page, piesa & piece) {
     btn_finish(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
+    last_page = page;
     page++;
 }
 
@@ -509,6 +524,9 @@ void mouseEvents () {
         else {
             std::cout << "NOTclickedOnPiece\n";
             if(clickonFinish() == 1)
+            //cout << patrate[0].piesa -> pieceName << " " << patrate[1].piesa -> pieceName << " " << patrate[2].piesa -> pieceName << " " << patrate[3].piesa -> pieceName << endl;
+            if(strlen(patrate[0].piesa -> pieceName) != 0 && strlen(patrate[1].piesa -> pieceName) != 0 && strlen(patrate[2].piesa -> pieceName) != 0 && strlen(patrate[3].piesa -> pieceName) != 0)
+            //cout << (strlen(patrate[2].piesa ->pieceName) == 0) << " ex" << endl;
             {
             matrici_piese();
              if(verificare_solutie(challengeNo) == 1)
@@ -517,8 +535,10 @@ void mouseEvents () {
                     castigare_challenge();
                 }
             else cout << "MAI INCEARCA" << endl;
-
             }
+            else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
+
+            clickonBACK(last_page);
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;

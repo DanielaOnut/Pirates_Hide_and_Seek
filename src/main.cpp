@@ -21,8 +21,10 @@ void desenare_initiala();
 bool verificare_solutie(int x);
 void matrici_piese();
 void btn_finish(int x);
+bool clickonFinish();
 void castigare_challenge();
 int redimensionare_img_ch(char s[]);
+void clickonBACK();
 
 /* Denis + Daniela */
 void rotateImages(piesa &piece);
@@ -31,6 +33,7 @@ int nrPiesa(piesa &);
 
 int main()
 {
+
     //play_sound();
     initializareCoord();
     initwindow(900,590,"Pirates Hide and Seek",160,50);
@@ -38,7 +41,7 @@ int main()
     cleardevice();
 
     desenare_initiala();
-    challengeNo = 1;
+    challengeNo = 15;
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     mouseEvents();
