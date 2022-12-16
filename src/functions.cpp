@@ -258,10 +258,6 @@ void drawPieces (piesa & movablePiece) {
 /* Denis */
 void * vector_imagine[10];
 
-void play_sound()
-{
-//    PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
-}
 
 int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si returneaza cate elemente are challenge-ul pentru a le centra
 {
@@ -359,6 +355,64 @@ void btn_finish(int x)
     else putimage(370, 540, img_finish, COPY_PUT);
 }
 
+void play_sound(int k)
+{
+    if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+    else PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
+}
+
+/*Daca sunt la prima intrare (de on, sau off) salvez imaginea in memorie, iar daca nu afisez imaginea. Pentru a nu incepe de fiecare data melodia
+(functia se apeleaza mereu in update page) imi iau un con_ant, si apelez melodia doar daca ultimul contor este diferit de cel actual (s-a dat click pe sunet).*/
+void *soundon;
+void *soundoff;
+int con = -1, con_ant = -2;
+void btn_snd()
+{
+    setcolor(15);
+    rectangle(848, 18, 882, 52);
+    if(con == -1)
+    {
+        soundon = new char[imagesize(850, 20, 880, 50)];
+        readimagefile("./../resources/soundon.gif", 850, 20, 880, 50);
+        getimage(850, 20, 880, 50, soundon);
+        if(con_ant != con)play_sound(1);
+    }
+    if(con == 0)
+    {
+        soundoff = new char[imagesize(850, 20, 880, 50)];
+        readimagefile("./../resources/soundoff.gif", 850, 20, 880, 50);
+        getimage(850, 20, 880, 50, soundoff);
+        if(con_ant != con)play_sound(2);
+    }
+    if(con > 0)
+        if(con % 2 != 0)
+        {
+            putimage(850, 20, soundon, COPY_PUT);
+            if(con_ant != con)play_sound(con);
+        }
+        else
+        {
+            putimage(850, 20, soundoff, COPY_PUT);
+            if(con_ant != con)play_sound(con);
+        }
+    //cout << con_ant << " " << con << endl;
+    con_ant = con;
+}
+
+
+bool clickonsound()
+{
+    int x = mousex(), y = mousey();
+    if(getvisualpage() < 3)
+        if(x >= 848 && x <= 882 && y >= 18 && y <= 52)
+            {
+                con++;
+                return true;
+            }
+    return false;
+
+}
+
 bool clickonBACK()
 {
     int x = mousex(), y = mousey();
@@ -380,6 +434,7 @@ void updatePage (int & page, piesa & piece) {
     drawPieces(piece);
     afisare_challenge(challengeNo, 1);
     btn_finish(1);
+    btn_snd();
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     last_page = page;
@@ -395,6 +450,7 @@ void rotateImages(piesa &piece)
     cifra[1] = '\0';
     strcpy(piece.pieceName + 18, cifra);
     strcpy(piece.pieceName + 19, ".gif");
+    Beep(50,50);
 }
 
 void movePiece (piesa & piece) {
@@ -536,7 +592,12 @@ void mouseEvents () {
                  else cout << "MAI INCEARCA" << endl;
             }
             else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
-
+            if(clickonsound() == 1)
+            {
+                if (page % 3 == 0)
+                    page = 1;
+                updatePage(page,piece);
+            }
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
@@ -563,6 +624,7 @@ void initializareValori () {
 
     gameWon = false; page = 2; k = 0;
     cont = 0;
+    con = -1, con_ant = -2;
 }
 
 void start_game (int level) {
@@ -571,5 +633,6 @@ void start_game (int level) {
     desenare_initiala();
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
+    btn_snd();
     mouseEvents();
 }
