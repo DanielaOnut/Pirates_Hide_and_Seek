@@ -9,7 +9,6 @@ using namespace std;
 
 /* Denis */
 int mat_tabla[7][7];
-int last_page;
 
 /* Daniela */
 int challengeNo = 0;
@@ -419,9 +418,6 @@ bool clickonBACK()
         if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
             return true;
     return false;
-            /*cout << getvisualpage() << " APASARE BACK" << endl;
-    cout << getvisualpage() << " APASARE BACK" << endl;
-    rectangle(10, 520, 110, 575);*/
 
 }
 
@@ -436,7 +432,6 @@ void updatePage (int & page, piesa & piece) {
     btn_snd();
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
-    last_page = page;
     page++;
 }
 
@@ -539,6 +534,7 @@ void mouseEvents () {
         clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
         if (gameWon) {
+            clearmouseclick(WM_RBUTTONDOWN);
             if (clickonBACK())
                 return;
             continue;
@@ -613,10 +609,8 @@ void initializareValori () {
     patrate[2] = {195,295,405,505};
     patrate[3] = {425,295,635,505};
 
-    char sir[20] = "r1.gif";
     for (int i = 0; i < 4; ++i) {
         patrate[i].piesa = & emptyPiece;
-        strcpy(piese[i].pieceName + 17,sir);
         piese[i].rotatie = 1;
     }
 

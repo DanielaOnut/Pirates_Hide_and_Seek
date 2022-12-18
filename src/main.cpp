@@ -39,9 +39,11 @@ int nrPiesa(piesa &);
 int main()
 {
     initwindow(900,590,"Pirates Hide and Seek",160,50);
+
     LevelsPage levelsPage;
     levelsPage.mouseEvents();
     btn_snd();
+
     for (int i = 0; i < 45; ++i) {
         if (i < 10)
             delete vector_imagine[i];
