@@ -358,45 +358,41 @@ void btn_finish(int x)
 void play_sound(int k)
 {
     if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
-    else PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
+    else //PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
+        PlaySound(NULL, NULL, SND_ASYNC);
 }
 
 /*Daca sunt la prima intrare (de on, sau off) salvez imaginea in memorie, iar daca nu afisez imaginea. Pentru a nu incepe de fiecare data melodia
 (functia se apeleaza mereu in update page) imi iau un con_ant, si apelez melodia doar daca ultimul contor este diferit de cel actual (s-a dat click pe sunet).*/
 void *soundon;
 void *soundoff;
-int con = -1, con_ant = -2;
+int con = -1, con_ant = -2, ok = 0;
+
 void btn_snd()
 {
     setcolor(15);
     rectangle(848, 18, 882, 52);
-    if(con == -1)
+    if(con == -1 && ok == 0)
     {
         soundon = new char[imagesize(850, 20, 880, 50)];
         readimagefile("./../resources/soundon.gif", 850, 20, 880, 50);
         getimage(850, 20, 880, 50, soundon);
-        if(con_ant != con)play_sound(1);
+        ok++;
     }
-    if(con == 0)
+    if(con == 0 && ok == 1)
     {
         soundoff = new char[imagesize(850, 20, 880, 50)];
         readimagefile("./../resources/soundoff.gif", 850, 20, 880, 50);
         getimage(850, 20, 880, 50, soundoff);
-        if(con_ant != con)play_sound(2);
+        ok++;
     }
-    if(con > 0)
         if(con % 2 != 0)
-        {
             putimage(850, 20, soundon, COPY_PUT);
-            if(con_ant != con)play_sound(con);
-        }
+
         else
-        {
             putimage(850, 20, soundoff, COPY_PUT);
-            if(con_ant != con)play_sound(con);
-        }
+
     //cout << con_ant << " " << con << endl;
-    con_ant = con;
 }
 
 
@@ -407,6 +403,9 @@ bool clickonsound()
         if(x >= 848 && x <= 882 && y >= 18 && y <= 52)
             {
                 con++;
+                if(con == 0)play_sound(2);
+                if(con_ant != con)play_sound(con);
+                con_ant = con;
                 return true;
             }
     return false;
@@ -633,5 +632,6 @@ void start_game (int level) {
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     btn_snd();
+    play_sound(1);
     mouseEvents();
 }
