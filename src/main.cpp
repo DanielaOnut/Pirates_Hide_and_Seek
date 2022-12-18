@@ -27,9 +27,11 @@ void btn_finish(int x);
 bool clickonFinish();
 void castigare_challenge();
 int redimensionare_img_ch(char s[]);
+void btn_back();
 bool clickonBACK();
 bool clickonsound();
 void btn_snd();
+void btn_backk();
 
 /* Denis + Daniela */
 void rotateImages(piesa &piece);
@@ -39,11 +41,9 @@ int nrPiesa(piesa &);
 int main()
 {
     initwindow(900,590,"Pirates Hide and Seek",160,50);
-
     LevelsPage levelsPage;
     levelsPage.mouseEvents();
     btn_snd();
-
     for (int i = 0; i < 45; ++i) {
         if (i < 10)
             delete vector_imagine[i];

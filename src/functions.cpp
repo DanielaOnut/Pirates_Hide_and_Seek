@@ -9,6 +9,7 @@ using namespace std;
 
 /* Denis */
 int mat_tabla[7][7];
+int last_page;
 
 /* Daniela */
 int challengeNo = 0;
@@ -354,6 +355,19 @@ void btn_finish(int x)
     else putimage(370, 540, img_finish, COPY_PUT);
 }
 
+void *img_back;
+
+void btn_back(int x)
+{
+    if(x == 0)
+    {
+    img_back = new char[imagesize(0, 0, 265, 114)];
+    readimagefile("./../resources/buton_finish.gif", 370, 540, 470, 580);
+    getimage(370, 540, 470, 580, img_finish);
+    }
+    else putimage(370, 540, img_finish, COPY_PUT);
+}
+
 void play_sound(int k)
 {
     if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
@@ -365,7 +379,7 @@ void play_sound(int k)
 (functia se apeleaza mereu in update page) imi iau un con_ant, si apelez melodia doar daca ultimul contor este diferit de cel actual (s-a dat click pe sunet).*/
 void *soundon;
 void *soundoff;
-int con = -1, con_ant = -2, ok = 0;
+int con = -1, con_ant = -2, ok = 0, okk = 0;
 
 void btn_snd()
 {
@@ -390,7 +404,7 @@ void btn_snd()
 
         else
             putimage(850, 20, soundoff, COPY_PUT);
-
+    okk++;
     //cout << con_ant << " " << con << endl;
 }
 
@@ -418,6 +432,22 @@ bool clickonBACK()
         if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
             return true;
     return false;
+            /*cout << getvisualpage() << " APASARE BACK" << endl;
+    cout << getvisualpage() << " APASARE BACK" << endl;
+    rectangle(10, 520, 110, 575);*/
+
+}
+
+void *img_backk;
+void btn_backk(int x)
+{
+    if(x == 0)
+        {
+            img_backk = new char[imagesize(10, 545, 80, 580)];
+            readimagefile("./../resources/back.gif", 10, 545, 80, 580);
+            getimage(10, 545, 80, 580, img_backk);
+        }
+        else putimage(10, 545, img_backk, COPY_PUT);
 
 }
 
@@ -430,8 +460,10 @@ void updatePage (int & page, piesa & piece) {
     afisare_challenge(challengeNo, 1);
     btn_finish(1);
     btn_snd();
+    btn_backk(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
+    last_page = page;
     page++;
 }
 
@@ -534,7 +566,6 @@ void mouseEvents () {
         clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
         if (gameWon) {
-            clearmouseclick(WM_RBUTTONDOWN);
             if (clickonBACK())
                 return;
             continue;
@@ -609,14 +640,16 @@ void initializareValori () {
     patrate[2] = {195,295,405,505};
     patrate[3] = {425,295,635,505};
 
+    char sir[20] = "r1.gif";
     for (int i = 0; i < 4; ++i) {
         patrate[i].piesa = & emptyPiece;
+        strcpy(piese[i].pieceName + 17,sir);
         piese[i].rotatie = 1;
     }
 
     gameWon = false; page = 2; k = 0;
     cont = 0;
-    con = -1, con_ant = -2;
+    //con = -1, con_ant = -2;
 }
 
 void start_game (int level) {
@@ -626,6 +659,7 @@ void start_game (int level) {
     afisare_challenge(challengeNo, 0);
     btn_finish(0);
     btn_snd();
-    play_sound(1);
+    if(okk == 1)play_sound(1);
+    btn_backk(0);
     mouseEvents();
 }
