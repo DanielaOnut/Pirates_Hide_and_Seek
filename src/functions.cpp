@@ -341,19 +341,6 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 }
 
-void * img_finish;
-
-void btn_finish(int x)
-{
-    if(x == 0)
-    {
-    img_finish = new char[imagesize(0, 0, 265, 114)];
-    readimagefile("./../resources/buton_finish.gif", 370, 540, 470, 580);
-    getimage(370, 540, 470, 580, img_finish);
-    }
-    else putimage(370, 540, img_finish, COPY_PUT);
-}
-
 void play_sound(int k)
 {
     if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
@@ -411,34 +398,11 @@ bool clickonsound()
 
 }
 
-bool clickonBACK_congrats()
+bool clickonBACK()
 {
     int x = mousex(), y = mousey();
     if(gameWon)
-        if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
-            return true;
-    return false;
-
-}
-
-void *img_back_game;
-void btn_back_game(int x)
-{
-    if(x == 0)
-        {
-            img_back_game = new char[imagesize(10, 545, 80, 580)];
-            readimagefile("./../resources/back.gif", 10, 545, 80, 580);
-            getimage(10, 545, 80, 580, img_back_game);
-        }
-        else putimage(10, 545, img_back_game, COPY_PUT);
-
-}
-
-bool clickonbackgame()
-{
-    int x = mousex(), y = mousey();
-    if(getvisualpage() < 3) //verific daca sunt pe pagina cu jocul
-        if(x >= 10 && x <= 80 && y >= 545 && y <= 580)
+        if(x >= 13 && x <= 101 && y >= 544 && y <= 581)
             return true;
     return false;
 }
@@ -450,9 +414,7 @@ void updatePage (int & page, piesa & piece) {
     drawBoard();
     drawPieces(piece);
     afisare_challenge(challengeNo, 1);
-    btn_finish(1);
     btn_snd();
-    btn_back_game(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -484,7 +446,7 @@ void movePiece (piesa & piece) {
 bool clickonFinish()
 {
     int x = mousex(), y = mousey();
-    if(x >= 370 && x <= 540 && y >= 470 && y <= 580)return true;
+    if(x >= 370 && x <= 470 && y >= 544 && y <= 584) return true;
     return false;
 }
 
@@ -578,8 +540,8 @@ void mouseEvents () {
         clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
         if (gameWon) {
-                 clearmouseclick(WM_RBUTTONDOWN);
-            if (clickonBACK_congrats())
+            clearmouseclick(WM_RBUTTONDOWN);
+            if (clickonBACK())
                 return;
             continue;
         }
@@ -602,6 +564,7 @@ void mouseEvents () {
             if (page % 3 == 0)
                 page = 1;
             updatePage(page, piece);
+
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
@@ -664,7 +627,7 @@ void initializareValori () {
 
     gameWon = false; page = 2; k = 0;
     cont = 0;
-    //con = -1, con_ant = -2;
+    con = -1, con_ant = -2;
 }
 
 void start_game (int level) {
@@ -672,9 +635,7 @@ void start_game (int level) {
     initializareValori();
     desenare_initiala();
     afisare_challenge(challengeNo, 0);
-    btn_finish(0);
     btn_snd();
     if(okk == 1)play_sound(1);
-    btn_back_game(0);
     mouseEvents();
 }
