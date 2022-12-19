@@ -343,9 +343,9 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 void play_sound(int k)
 {
-    if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
-    else //PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
-        PlaySound(NULL, NULL, SND_ASYNC);
+//    if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+//    else //PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
+//        PlaySound(NULL, NULL, SND_ASYNC);
 }
 
 /*Daca sunt la prima intrare (de on, sau off) salvez imaginea in memorie, iar daca nu afisez imaginea. Pentru a nu incepe de fiecare data melodia
@@ -401,9 +401,8 @@ bool clickonsound()
 bool clickonBACK()
 {
     int x = mousex(), y = mousey();
-    if(gameWon)
-        if(x >= 13 && x <= 101 && y >= 544 && y <= 581)
-            return true;
+    if(x >= 13 && x <= 101 && y >= 544 && y <= 581)
+        return true;
     return false;
 }
 
@@ -576,6 +575,8 @@ void mouseEvents () {
         }
         else {
             std::cout << "NOTclickedOnPiece\n";
+            if (clickonBACK() == 1) // se afiseaza pagina de nivele
+                return;
             if(clickonFinish() == 1)
             //cout << patrate[0].piesa -> pieceName << " " << patrate[1].piesa -> pieceName << " " << patrate[2].piesa -> pieceName << " " << patrate[3].piesa -> pieceName << endl;
             if(strlen(patrate[0].piesa -> pieceName) != 0 && strlen(patrate[1].piesa -> pieceName) != 0 && strlen(patrate[2].piesa -> pieceName) != 0 && strlen(patrate[3].piesa -> pieceName) != 0)
@@ -636,6 +637,6 @@ void start_game (int level) {
     desenare_initiala();
     afisare_challenge(challengeNo, 0);
     btn_snd();
-    if(okk == 1)play_sound(1);
+    if(okk == 1) play_sound(1);
     mouseEvents();
 }
