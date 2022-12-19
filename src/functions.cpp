@@ -9,7 +9,6 @@ using namespace std;
 
 /* Denis */
 int mat_tabla[7][7];
-int last_page;
 
 /* Daniela */
 int challengeNo = 0;
@@ -355,19 +354,6 @@ void btn_finish(int x)
     else putimage(370, 540, img_finish, COPY_PUT);
 }
 
-void *img_back;
-
-void btn_back(int x)
-{
-    if(x == 0)
-    {
-    img_back = new char[imagesize(0, 0, 265, 114)];
-    readimagefile("./../resources/buton_finish.gif", 370, 540, 470, 580);
-    getimage(370, 540, 470, 580, img_finish);
-    }
-    else putimage(370, 540, img_finish, COPY_PUT);
-}
-
 void play_sound(int k)
 {
     if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
@@ -425,30 +411,36 @@ bool clickonsound()
 
 }
 
-bool clickonBACK()
+bool clickonBACK_congrats()
 {
     int x = mousex(), y = mousey();
     if(gameWon)
         if(x >= 10 && x <= 110 && y >= 500 && y <= 555)
             return true;
     return false;
-            /*cout << getvisualpage() << " APASARE BACK" << endl;
-    cout << getvisualpage() << " APASARE BACK" << endl;
-    rectangle(10, 520, 110, 575);*/
 
 }
 
-void *img_backk;
-void btn_backk(int x)
+void *img_back_game;
+void btn_back_game(int x)
 {
     if(x == 0)
         {
-            img_backk = new char[imagesize(10, 545, 80, 580)];
+            img_back_game = new char[imagesize(10, 545, 80, 580)];
             readimagefile("./../resources/back.gif", 10, 545, 80, 580);
-            getimage(10, 545, 80, 580, img_backk);
+            getimage(10, 545, 80, 580, img_back_game);
         }
-        else putimage(10, 545, img_backk, COPY_PUT);
+        else putimage(10, 545, img_back_game, COPY_PUT);
 
+}
+
+bool clickonbackgame()
+{
+    int x = mousex(), y = mousey();
+    if(getvisualpage() < 3) //verific daca sunt pe pagina cu jocul
+        if(x >= 10 && x <= 80 && y >= 545 && y <= 580)
+            return true;
+    return false;
 }
 
 void updatePage (int & page, piesa & piece) {
@@ -460,10 +452,9 @@ void updatePage (int & page, piesa & piece) {
     afisare_challenge(challengeNo, 1);
     btn_finish(1);
     btn_snd();
-    btn_backk(1);
+    btn_back_game(1);
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
-    last_page = page;
     page++;
 }
 
@@ -494,6 +485,27 @@ bool clickonFinish()
 {
     int x = mousex(), y = mousey();
     if(x >= 370 && x <= 540 && y >= 470 && y <= 580)return true;
+    return false;
+}
+
+bool clickonPlay()
+{
+    int x = mousex(), y = mousey();
+    if(x >= 345 && x <= 545 && y >= 167 && y <= 255)return true;
+    return false;
+}
+
+bool clickonRules()
+{
+    int x = mousex(), y = mousey();
+    if(x >= 345 && x <= 545 && y >= 295 && y <= 385)return true;
+    return false;
+}
+
+bool clickonExit_startgame()
+{
+    int x = mousex(), y = mousey();
+    if(x >= 740 && x <= 875 && y >= 500 && y <= 565)return true;
     return false;
 }
 
@@ -566,7 +578,8 @@ void mouseEvents () {
         clearmouseclick(WM_LBUTTONDBLCLK);
         clearmouseclick(WM_LBUTTONDOWN);
         if (gameWon) {
-            if (clickonBACK())
+                 clearmouseclick(WM_RBUTTONDOWN);
+            if (clickonBACK_congrats())
                 return;
             continue;
         }
@@ -589,7 +602,6 @@ void mouseEvents () {
             if (page % 3 == 0)
                 page = 1;
             updatePage(page, piece);
-
             // modificam imaginea piesei salvata in memorie pentru
             // ca fundalul sa fie transparent
             // extragem numarul piesei
@@ -614,7 +626,11 @@ void mouseEvents () {
                         gameWon = true;
                         continue;
                     }
-                 else cout << "MAI INCEARCA" << endl;
+                 else
+                 {
+                     cout << "MAI INCEARCA" << endl;
+                     readimagefile("./../resources/tryagain.gif", 770, 530, 900, 590);
+                 }
             }
             else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
             if(clickonsound() == 1)
@@ -627,6 +643,7 @@ void mouseEvents () {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
             }
+
             while (!ismouseclick(WM_LBUTTONUP)) { }
             clearmouseclick(WM_LBUTTONUP);
         }
@@ -640,10 +657,8 @@ void initializareValori () {
     patrate[2] = {195,295,405,505};
     patrate[3] = {425,295,635,505};
 
-    char sir[20] = "r1.gif";
     for (int i = 0; i < 4; ++i) {
         patrate[i].piesa = & emptyPiece;
-        strcpy(piese[i].pieceName + 17,sir);
         piese[i].rotatie = 1;
     }
 
@@ -660,6 +675,6 @@ void start_game (int level) {
     btn_finish(0);
     btn_snd();
     if(okk == 1)play_sound(1);
-    btn_backk(0);
+    btn_back_game(0);
     mouseEvents();
 }
