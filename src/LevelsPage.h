@@ -26,6 +26,7 @@ public:
 
     int clickedOnLevel ();
     void draw();
+    bool clickonBACK();
     void waitForMouseClick ();
     void mouseEvents ();
 

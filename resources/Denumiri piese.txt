@@ -1,2 +1,0 @@
-p x - piesa x (x de la 1 la 4 pentru fiecare din piese)
-r y - rotatia y (1 - piesa originala, 2 - piesa la dreapta, 3 - piesa invers, 4 - piesa la stanga)

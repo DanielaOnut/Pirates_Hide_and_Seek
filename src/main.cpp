@@ -1,7 +1,8 @@
 #include <iostream>
 #include <winbgim.h>
-#include <fstream>
 #include "functions.cpp"
+#include "Menu.h"
+#include "Menu.cpp"
 #include "LevelsPage.h"
 #include "LevelsPage.cpp"
 using namespace std;
@@ -29,9 +30,9 @@ int redimensionare_img_ch(char s[]);
 bool clickonBACK();
 bool clickonsound();
 void btn_snd();
-bool clickonPlay();
+/*bool clickonPlay(); // from Menu class
 bool clickonRules();
-bool clickonExit_startgame();
+bool clickonExit();*/
 
 /* Denis + Daniela */
 void rotateImages(piesa &piece);
@@ -42,8 +43,10 @@ int main()
 {
     initwindow(900,590,"Pirates Hide and Seek",160,50);
 
-    LevelsPage levelsPage;
-    levelsPage.mouseEvents();
+    Menu menu;
+    menu.mouseEvents();
+//    LevelsPage level;
+//    level.mouseEvents();
     btn_snd();
 
     for (int i = 0; i < 45; ++i) {

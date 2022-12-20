@@ -449,27 +449,6 @@ bool clickonFinish()
     return false;
 }
 
-bool clickonPlay()
-{
-    int x = mousex(), y = mousey();
-    if(x >= 345 && x <= 545 && y >= 167 && y <= 255)return true;
-    return false;
-}
-
-bool clickonRules()
-{
-    int x = mousex(), y = mousey();
-    if(x >= 345 && x <= 545 && y >= 295 && y <= 385)return true;
-    return false;
-}
-
-bool clickonExit_startgame()
-{
-    int x = mousex(), y = mousey();
-    if(x >= 740 && x <= 875 && y >= 500 && y <= 565)return true;
-    return false;
-}
-
 piesa & clickedOnPiece () {
     int x = mousex(), y = mousey();
     for (int i = 0; i < 4; ++i)
