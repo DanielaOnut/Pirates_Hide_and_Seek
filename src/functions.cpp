@@ -343,9 +343,9 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 void play_sound(int k)
 {
-//    if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
-//    else //PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
-//        PlaySound(NULL, NULL, SND_ASYNC);
+    if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
+    else //PlaySound("click.wav", NULL, SND_FILENAME|SND_ASYNC);
+        PlaySound(NULL, NULL, SND_ASYNC);
 }
 
 /*Daca sunt la prima intrare (de on, sau off) salvez imaginea in memorie, iar daca nu afisez imaginea. Pentru a nu incepe de fiecare data melodia
@@ -593,7 +593,7 @@ void mouseEvents () {
                  else
                  {
                      cout << "MAI INCEARCA" << endl;
-                     readimagefile("./../resources/tryagain.gif", 770, 530, 900, 590);
+                     readimagefile("./../resources/tryagain.gif", 750, 530, 880, 590);
                  }
             }
             else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
