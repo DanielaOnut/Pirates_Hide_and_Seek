@@ -628,7 +628,7 @@ void initializareValori () {
 
     gameWon = false; page = 2; k = 0;
     cont = 0;
-    con = -1, con_ant = -2;
+    //con = -1, con_ant = -2;
 }
 
 void start_game (int level) {
