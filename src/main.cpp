@@ -17,6 +17,8 @@ void movePiece (piesa &);
 void updatePage (int &, piesa &);
 void mouseEvents ();
 void start_game (int);
+void drawTimer ();
+std::string timeToString ();
 
 /* Denis */
 void afisare_challenge(int x, int y);
@@ -45,8 +47,7 @@ int main()
 
     Menu menu;
     menu.mouseEvents();
-//    LevelsPage level;
-//    level.mouseEvents();
+
     btn_snd();
 
     for (int i = 0; i < 45; ++i) {

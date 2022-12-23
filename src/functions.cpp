@@ -5,6 +5,7 @@
 #include <fstream>
 #include <Windows.h>
 #include <mmsystem.h>
+#include <ctime>
 using namespace std;
 
 /* Denis */
@@ -12,6 +13,8 @@ int mat_tabla[7][7];
 
 /* Daniela */
 int challengeNo = 0;
+int unit = 1;
+clock_t startTime;
 
 struct piesa {
     int x1, y1, x2, y2;
@@ -30,6 +33,42 @@ struct coordonate {
     int x1, y1;
     char element[30];
 }vCoord[37];
+
+std::string timeToString () {
+    char string[8];
+    clock_t currentTime = clock();
+    int s = (currentTime - startTime) / 1000;
+    int mins = (currentTime - startTime) / 60000;
+    int hrs = (currentTime - startTime) / 3600000;
+
+    if (hrs >= 0) strcpy(string,"0"), itoa (hrs,string + 1,10), strcat(string,":");
+    else strcpy (string,"00:");
+    if (mins >= 0) {
+        if (mins >= 60) mins -= 60 * hrs;
+        if (mins < 10)
+            strcat (string,"0"), itoa (mins,string + 1, 10);
+        else itoa (mins,string,10);
+        strcat(string,":");
+    }
+    if (s >= 0) {
+        if (s >= 60) s -= 60 * mins;
+        if (s < 10)
+            strcat (string,"0"), itoa (s,string + 4, 10);
+        else
+            itoa (s,string + 3,10);
+    }
+    return string;
+}
+
+void drawTimer () {
+    char sir[8];
+    strcpy(sir,timeToString().c_str());
+
+    setbkcolor(COLOR(206, 197, 189));
+    setcolor(BLACK);
+    settextstyle(8, HORIZ_DIR,4);
+    outtextxy(370,7,sir);
+}
 
 /* Denis */
 
@@ -121,7 +160,7 @@ void desenare_initiala()
         getimage(piese[w].x1, piese[w].y1, piese[w].x2,piese[w].y2, buffer[lg++]);
         //cout << piese[w].pieceName << piese[w].x1 << piese[w].y1 << piese[w].x2 << piese[w].y2 << endl;
     }
-
+    drawTimer();
 }
 
 int nrPiesa(piesa &piece) //obtin numarul piesei extragand din nume nr ei
@@ -227,12 +266,17 @@ int page;
 bool gameWon;
 void castigare_challenge()
 {
+    char sir[8];
+    strcpy(sir,timeToString().c_str());
+
     setactivepage(3);
     cleardevice();
     readimagefile("./../resources/congrats.gif",0, 0, 900, 590);
-    //cout << "a mers";
+    setbkcolor(COLOR(231, 221, 179));
+    setcolor(COLOR(90, 108, 42));
+    settextstyle(10, HORIZ_DIR,4);
+    outtextxy(497,372,sir);
     setvisualpage(3);
-    //cout << getvisualpage() << " uite " << endl;
 }
 
 /* Daniela */
@@ -413,7 +457,8 @@ void updatePage (int & page, piesa & piece) {
     drawBoard();
     drawPieces(piece);
     afisare_challenge(challengeNo, 1);
-    btn_snd();
+    btn_snd(); drawTimer();
+//    cout << time() << '\n';
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
     page++;
@@ -507,8 +552,13 @@ std::string isPieceInSquare (piesa & piece) {
     return "notInSquare";
 }
 
-void waitForMouseClick () { while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
-&& !ismouseclick(WM_RBUTTONDOWN)) { delay (100);} }
+void waitForMouseClick () {
+    while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
+            && !ismouseclick(WM_RBUTTONDOWN)) {
+        if (!gameWon) drawTimer();
+        delay (100);
+    }
+}
 
 void mouseEvents () {
     bool pieceRotated;
@@ -523,6 +573,7 @@ void mouseEvents () {
                 return;
             continue;
         }
+        drawTimer();
         if (ismouseclick(WM_RBUTTONDOWN)) {
             cout << "RCLICK\n";
             pieceRotated = true;
@@ -608,6 +659,9 @@ void initializareValori () {
     gameWon = false; page = 2; k = 0;
     cont = 0;
     //con = -1, con_ant = -2;
+    startTime = clock();
+    unit = 1;
+    unit *= CLOCKS_PER_SEC;
 }
 
 void start_game (int level) {
