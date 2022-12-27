@@ -15,11 +15,13 @@ struct button {
 };
 button emptyButton = {-1,-1,-1,-1,-1};
 
-int fr[61], played[61], kt = 0, nivel_modificat;
+int fr[61], played[61], nivel_modificat;
 void rezultate()
 {
     int i, secc = 0, nrch, minn;
     char s[20];
+    for(i = 1; i <= 61; i++)
+        played[i] = 0;
        ifstream citt("rezultate.txt");
            while(citt.get(s, 20))
            {
@@ -34,14 +36,14 @@ void rezultate()
            if(fr[nrch] == 0)
            {
                fr[nrch] = secc;
-               if(kt == 0)played[nrch]++;
+               played[nrch]++;
            }
            else if(fr[nrch] > secc)
            {
                fr[nrch] = secc;
-               if(kt == 0)played[nrch]++;
+               played[nrch]++;
            }
-            else if(kt == 0)played[nrch]++;
+            else played[nrch]++;
 
             //for(i = 1; i <= 60;i++)
                 //if(played[i] != 0)cout << i << " " << played[i] << endl;
@@ -49,7 +51,6 @@ void rezultate()
             }
             nivel_modificat = nrch;
        citt.close();
-       kt = 1;
     //for(i = 1; i <= 60; i++)
         //if(fr[i] != 0)cout << i << " " << fr[i] << endl;
     //cout << "test" << endl;

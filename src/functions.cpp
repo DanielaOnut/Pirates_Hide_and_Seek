@@ -267,19 +267,29 @@ bool verificare_solutie(int x) // x va fi challenge-ul
 
 void salvare_info()
 {
+    int index;
+    ifstream citesc("index.txt");
     ofstream afiss("history.txt", ios::app);
-    afiss << "Challenge: " << challengeNo << " | ";
+    if(challengeNo < 10)afiss << "Challenge: " << challengeNo << "  | ";
+    else afiss << "Challenge: " << challengeNo << " | ";
     char sir[8];
     strcpy(sir,timeToString().c_str());
     afiss << "Time: " << sir << " | Hint used: ";
     if(challengeNo < 17)afiss << "N/A";
-        else if(rt == 0)afiss << "No";
+        else if(rt == 0)afiss << "No ";
             else if(rt == 1)afiss << "Yes";
     afiss << " | Date: ";
     time_t now = time(0);
     tm* localtm = localtime(&now);
     afiss << asctime(localtm);
     afiss.flush();
+    citesc >> index;
+    index++;
+    citesc.close();
+    ofstream afisez("index.txt");
+    afisez << index;
+    afisez.flush();
+    afisez.close();
 }
 
 int page;

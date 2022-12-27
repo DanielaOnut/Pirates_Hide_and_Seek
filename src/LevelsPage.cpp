@@ -6,10 +6,15 @@
 using namespace std;
 
 void *ranking[5];
-int levels_played = 0, time_s = 999, time_l = 1, ch_time_s, ch_time_l, most_played1 = 0, most_played2 = 0;
+int levels_played, time_s, time_l, ch_time_s, ch_time_l, most_played1, most_played2;
 //mostplayed1 -> cel mai jucat challenge, 2 -> de cate ori a fost jucat acel challenge
 void LevelsPage::ranking()
 {
+    levels_played = 0;
+    time_s = 999;
+    time_l = 1;
+    most_played1 = 0;
+    most_played2 = 0;
     rezultate();
     int i;
     for(i = 1; i < 61; i++)
@@ -111,9 +116,89 @@ void LevelsPage::drawhistory()
     setbkcolor(COLOR(127, 51, 0));
     setcolor(WHITE);
     settextstyle(8, HORIZ_DIR,1);
-    outtextxy(316, 32, s);
-}
+    outtextxy(316, 80, s);
 
+    int height = textheight(s);
+    if(time_s != 999)
+    {
+    s[0] = '\0';
+    strcpy(s, "Shortest time spent: ");
+    itoa(time_s, s + 21, 10);
+    strcat(s, " sec");
+    outtextxy(316, 80 + height, s);
+    }
+    else outtextxy(316, 80 + height, "Shortest time spent: N/A");
+
+    if(time_s != 999)
+    {
+    s[0] = '\0';
+    strcpy(s, "Shortest time challenge: ");
+    itoa(ch_time_s, s + 25, 10);
+    outtextxy(316, 80 + 2 * height, s);
+    }
+    else outtextxy(316, 80 + 2 * height, "Shortest time challenge: N/A");
+
+    if(time_l != 1)
+    {
+    s[0] = '\0';
+    strcpy(s, "Longest time spent: ");
+    itoa(time_l, s + 20, 10);
+    strcat(s, " sec");
+    outtextxy(316, 80 + 3 * height, s);
+    }
+    else outtextxy(316, 80 + 3 * height, "Longest time spent:  N/A");
+
+    if(time_l != 1)
+    {
+    s[0] = '\0';
+    strcpy(s, "Longest time challenge: ");
+    itoa(ch_time_l, s + 24, 10);
+    outtextxy(316, 80 + 4 * height, s);
+    }
+    else outtextxy(316, 80 + 4 * height, "Longest time challenge:  N/A");
+
+    if(most_played1 != 0)
+    {
+    s[0] = '\0';
+    strcpy(s, "Most played challenge: ");
+    itoa(most_played1, s + 23, 10);
+    outtextxy(316, 80 + 5 * height, s);
+    }
+    else outtextxy(316, 80 + 5 * height, "Most played challenge: N/A");
+
+    if(most_played2 != 0)
+    {
+    s[0] = '\0';
+    strcpy(s, "Played: ");
+    itoa(most_played2, s + 8, 10);
+    strcat(s, " times");
+    outtextxy(316, 80 + 6 * height, s);
+    }
+    else outtextxy(316, 80 + 6 * height, "Played: N/A");
+
+    ifstream cit("index.txt");
+    int index;
+    cit >> index;
+    int hei = 315;
+    char p[200], k[200];
+    ifstream fin("history.txt");
+    int i = 1;
+    while(i <= index - 12)
+    {
+        fin.get(k, 200);
+        fin.get();
+        i++;
+    }
+    for(i = 0; i < 12; i++)
+    {
+        fin.get(k, 200);
+        fin.get();
+        strcpy(p, k);
+        outtextxy(25, hei, p);
+        hei = hei + textheight(p);
+    }
+
+}
 void LevelsPage::mouseEvents () {
     while (1) {
         waitForMouseClick();
@@ -140,6 +225,7 @@ void LevelsPage::mouseEvents () {
                 this->history_clicked = true;
                 setactivepage(5);
                 readimagefile("./../resources/history.gif", 0, 0, 900, 590);
+                ranking();
                 this->drawhistory();
                 setvisualpage(5);
             }
