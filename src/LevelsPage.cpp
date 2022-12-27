@@ -109,6 +109,7 @@ void LevelsPage::drawhistory()
     itoa(levels_played, s + 19, 10);
     strcat(s, "/60");
     setbkcolor(COLOR(127, 51, 0));
+    setcolor(WHITE);
     settextstyle(8, HORIZ_DIR,1);
     outtextxy(316, 32, s);
 }
