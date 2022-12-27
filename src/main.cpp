@@ -32,6 +32,10 @@ int redimensionare_img_ch(char s[]);
 bool clickonBACK();
 bool clickonsound();
 void btn_snd();
+void rezultate();
+bool clickonhint();
+bool trans_inminn();
+void hint_btn(int g);
 /*bool clickonPlay(); // from Menu class
 bool clickonRules();
 bool clickonExit();*/
@@ -44,6 +48,7 @@ int nrPiesa(piesa &);
 int main()
 {
     initwindow(900,590,"Pirates Hide and Seek",160,50);
+    //rezultate();
 
     Menu menu;
     menu.mouseEvents();

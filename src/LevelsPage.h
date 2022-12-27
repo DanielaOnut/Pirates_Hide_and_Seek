@@ -7,12 +7,53 @@
 
 #include <iostream>
 #include <winbgim.h>
-
+#include <fstream>
+using namespace std;
 struct button {
     int x1, y1, x2, y2;
     int level;
 };
 button emptyButton = {-1,-1,-1,-1,-1};
+
+int fr[61], played[61], kt = 0, nivel_modificat;
+void rezultate()
+{
+    int i, secc = 0, nrch, minn;
+    char s[20];
+       ifstream citt("rezultate.txt");
+           while(citt.get(s, 20))
+           {
+           citt.get();
+           char *p = strtok(s, " ");
+           nrch = atoi(p);
+           p = strtok(NULL, ":");
+           minn = atoi(p);
+           p = strtok(NULL, " ");
+           secc = atoi(p);
+           secc = secc + 60 * minn;
+           if(fr[nrch] == 0)
+           {
+               fr[nrch] = secc;
+               if(kt == 0)played[nrch]++;
+           }
+           else if(fr[nrch] > secc)
+           {
+               fr[nrch] = secc;
+               if(kt == 0)played[nrch]++;
+           }
+            else if(kt == 0)played[nrch]++;
+
+            //for(i = 1; i <= 60;i++)
+                //if(played[i] != 0)cout << i << " " << played[i] << endl;
+           //cout << nrch << " " << fr[nrch] << " " << secc << endl;
+            }
+            nivel_modificat = nrch;
+       citt.close();
+       kt = 1;
+    //for(i = 1; i <= 60; i++)
+        //if(fr[i] != 0)cout << i << " " << fr[i] << endl;
+    //cout << "test" << endl;
+}
 
 class LevelsPage {
 private:
@@ -21,14 +62,17 @@ private:
 
     int levelPageImagesNo = 0;
     int lg = 0;
+    bool history_clicked = false;
 public:
     LevelsPage ();
-
     int clickedOnLevel ();
     void draw();
     bool clickonBACK();
     void waitForMouseClick ();
     void mouseEvents ();
+    void ranking();
+    void punesteluta(int nivel, int indent, int height);
+    void drawhistory();
 
     ~LevelsPage() {
         for (int i = 0; i < 61; ++i)

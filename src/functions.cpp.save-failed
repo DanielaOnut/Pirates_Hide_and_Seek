@@ -6,13 +6,13 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <ctime>
-#include <cstdlib> // current date and time
+#include <common.h>
 using namespace std;
 
 /* Denis */
 int mat_tabla[7][7];
 ofstream fout("rezultate.txt", ios::app); //ios:app - optiune pentru a nu rescrie fisierul, ci a scrie in continuarea continutului existent
-int rt = 0;
+
 
 /* Daniela */
 int challengeNo = 0;
@@ -265,21 +265,42 @@ bool verificare_solutie(int x) // x va fi challenge-ul
     return true;
 }
 
-void salvare_info()
+int fr[61];
+void rezultate()
 {
-    ofstream afiss("history.txt", ios::app);
-    afiss << "Challenge: " << challengeNo << " | ";
+    int i, secc = 0, nrch, minn;
+    char s[20];
+       ifstream citt("rezultate.txt");
+       for(i = 1; i <= 60; i++)
+       {
+           citt.get(s, 20);
+           citt.get();
+           char *p = strtok(s, " ");
+           nrch = atoi(p);
+           p = strtok(NULL, ":");
+           minn = atoi(p);
+           p = strtok(NULL, " ");
+           secc = atoi(p);
+           secc = secc + 60 * minn;
+           if(fr[nrch] == 0)fr[nrch] = secc;
+           else if(fr[nrch] > secc)fr[nrch] = secc;
+           //cout << nrch << " " << fr[nrch] << " " << secc << endl;
+       }
+       citt.close();
+    for(i = 1; i <= 60; i++)
+        if(fr[i] != 0)cout << i << " " << fr[i] << endl;
+    //cout << "test" << endl;
+}
+
+void trans_inminn()
+{
     char sir[8];
+    int minn;
     strcpy(sir,timeToString().c_str());
-    afiss << "Time: " << sir << " | Hint used: ";
-    if(challengeNo < 17)afiss << "N/A";
-        else if(rt == 0)afiss << "No";
-            else if(rt == 1)afiss << "Yes";
-    afiss << " | Date: ";
-    time_t now = time(0);
-    tm* localtm = localtime(&now);
-    afiss << asctime(localtm);
-    afiss.flush();
+    cout << sir << endl;
+    char *p = strtok(sir, ":");
+    minn = atoi(p);
+    cout << minn;
 }
 
 int page;
@@ -293,7 +314,6 @@ void castigare_challenge()
     fout << endl;
     fout.flush(); //file.flush() optiune pentru a salva continutul din fisier dupa scrierea in el
     //rezultate();
-    salvare_info();
 
     setactivepage(3);
     cleardevice();
@@ -451,65 +471,6 @@ void btn_snd()
     //cout << con_ant << " " << con << endl;
 }
 
-void *hint;
-void *hint_img;
-int f = 1, h = 1;
-void hint_btn(int g)
-{
-    if(g == 0) // g este 0 pentru butonul de hint si 1 daca se apasa pe buton (imaginea de hint)
-        if(f == 1)
-        {
-            hint = new char[imagesize(790, 541, 875, 583)];
-            readimagefile("./../resources/hint_btn.gif", 790, 541, 875, 583);
-            getimage(790, 541, 875, 583, hint);
-            f = 0;
-        }
-        else putimage(790, 541, hint, COPY_PUT);
-    else
-    {
-        ifstream cit("hint.txt"); //fisierul cu hinturile
-        char p[16] = "./../resources/";
-        char s[7];
-        int index = 1, index_final = challengeNo - 16; // - 16 pentru ca de la challnge 17 incep sa apara hint uri si in fisier liniile sunt de la 1
-        while(index <= index_final) // pargurg fisierul pana la linia care ma intereseaza
-        {
-            cit.get(s, 7);
-            cit.get();
-            index++;
-        }
-        strcat(p, s);
-        p[21] = '\0';
-        if(h == 1)
-        {
-            hint_img = new char[imagesize(835, 525, 895, 585)];
-            readimagefile(p, 835, 525, 895, 585);
-            getimage(835, 525, 895, 585, hint_img);
-            h = 2;
-        }
-        else putimage(835, 525, hint_img, COPY_PUT);
-    }
-}
-
-bool trans_inminn() //verific daca a trecut un minut de joc
-{   if(challengeNo > 16)
-    {
-        char sir[8];
-        int minn;
-        strcpy(sir,timeToString().c_str());
-        char *p = strtok(sir, ":");
-        minn = atoi(p);
-        if(minn >= 1)return true;
-    }
-    return false;
-}
-
-bool clickonhint()
-{
-    int x = mousex(), y = mousey();
-    if(x >= 790 && x <= 875 && y >= 541 && y <= 583)
-        return true;
-    return false;
-}
 
 bool clickonsound()
 {
@@ -543,8 +504,6 @@ void updatePage (int & page, piesa & piece) {
     drawPieces(piece);
     afisare_challenge(challengeNo, 1);
     btn_snd(); drawTimer();
-    if(trans_inminn() == 1 && rt == 0)hint_btn(0); //daca rt e 0 inseamna ca nu s-a apasat pe hint si afisez butonul
-    else if(trans_inminn() == 1 && rt == 1)hint_btn(1); //daca rt e 1 inseamna ca s-a apasat si afisez imaginea
 //    cout << time() << '\n';
     readimagefile(piece.pieceName,piece.x1,piece.y1,piece.x2,piece.y2);
     setvisualpage(page);
@@ -642,11 +601,7 @@ std::string isPieceInSquare (piesa & piece) {
 void waitForMouseClick () {
     while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
             && !ismouseclick(WM_RBUTTONDOWN)) {
-        if (!gameWon)
-        {
-            drawTimer();
-            if(trans_inminn() == 1 && rt == 0)hint_btn(0); //daca a trecut un minut afisez butonul de hint
-        }
+        if (!gameWon) drawTimer();
         delay (100);
     }
 }
@@ -724,14 +679,6 @@ void mouseEvents () {
                     page = 1;
                 updatePage(page,piece);
             }
-            if(clickonhint() == 1) //daca dau click pe hint dau updatepage si afisez imaginea
-                {
-                    rt = 1;
-                    if (page % 3 == 0)
-                    page = 1;
-                    updatePage(page, piece);
-                    hint_btn(1);
-                }
             if (ismouseclick(WM_RBUTTONDOWN)) {
                 clearmouseclick(WM_RBUTTONDOWN);
                 continue;
@@ -740,6 +687,7 @@ void mouseEvents () {
             while (!ismouseclick(WM_LBUTTONUP)) { }
             clearmouseclick(WM_LBUTTONUP);
         }
+        trans_inminn();
     }
 }
 
@@ -761,7 +709,6 @@ void initializareValori () {
     startTime = clock();
     unit = 1;
     unit *= CLOCKS_PER_SEC;
-    rt = 0; h = 1; //reinitializez pentru fiecare challenge valorile pentru hint
 }
 
 void start_game (int level) {
