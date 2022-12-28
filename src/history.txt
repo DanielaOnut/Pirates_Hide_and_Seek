@@ -8,3 +8,8 @@ Challenge: 3  | Time: 00:09 | Hint used: N/A | Date: Tue Dec 27 20:13:34 2022
 Challenge: 1  | Time: 00:09 | Hint used: N/A | Date: Tue Dec 27 20:16:40 2022
 Challenge: 60 | Time: 01:11 | Hint used: Yes | Date: Tue Dec 27 20:21:49 2022
 Challenge: 1  | Time: 00:07 | Hint used: N/A | Date: Tue Dec 27 20:25:40 2022
+Challenge: 4  | Time: 00:28 | Hint used: N/A | Date: Tue Dec 27 20:35:24 2022
+Challenge: 1  | Time: 00:07 | Hint used: N/A | Date: Tue Dec 27 20:40:47 2022
+Challenge: 1  | Time: 00:06 | Hint used: N/A | Date: Wed Dec 28 10:16:58 2022
+Challenge: 59 | Time: 01:35 | Hint used: Yes | Date: Wed Dec 28 10:20:33 2022
+Challenge: 33 | Time: 00:17 | Hint used: No  | Date: Wed Dec 28 11:26:16 2022

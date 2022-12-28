@@ -36,13 +36,24 @@ void rezultate();
 bool clickonhint();
 bool trans_inminn();
 void hint_btn(int g);
-/*bool clickonPlay(); // from Menu class
+void salvare_info();
+bool trans_inminn();
+///Menu class
+/*bool clickonPlay();
 bool clickonRules();
 bool clickonExit();*/
+///Levels class
+/*bool rezultate()
+void ranking();
+bool clickonhistory();
+void drawhistory();
+*/
 
 /* Denis + Daniela */
 void rotateImages(piesa &piece);
 int nrPiesa(piesa &);
+///Levels class
+/*void punesteluta()*/
 
 
 int main()

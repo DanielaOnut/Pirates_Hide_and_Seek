@@ -12,12 +12,14 @@ using namespace std;
 /* Denis */
 int mat_tabla[7][7];
 ofstream fout("rezultate.txt", ios::app); //ios:app - optiune pentru a nu rescrie fisierul, ci a scrie in continuarea continutului existent
-int rt = 0;
+int rt = 0; //contor buton hint
 
 /* Daniela */
 int challengeNo = 0;
 int unit = 1;
 clock_t startTime;
+
+/* Daniela */
 
 struct piesa {
     int x1, y1, x2, y2;
@@ -27,15 +29,21 @@ struct piesa {
 } piese[4];
 piesa emptyPiece = {-1,-1,-1,-1};
 
+/* Daniela */
+
 struct patrat {
     int x1, y1, x2, y2;
     piesa * piesa = & emptyPiece; // retinem ce piesa e in fiecare patrat
 } patrate[4];
 
+/* Daniela */
+
 struct coordonate {
     int x1, y1;
     char element[30];
 }vCoord[37];
+
+/* Daniela */
 
 std::string timeToString () {
     char string[8];
@@ -62,6 +70,8 @@ std::string timeToString () {
     }
     return string;
 }
+
+/* Daniela */
 
 void drawTimer () {
     char sir[8];
@@ -166,6 +176,8 @@ void desenare_initiala()
     drawTimer();
 }
 
+/* Denis si Daniela */
+
 int nrPiesa(piesa &piece) //obtin numarul piesei extragand din nume nr ei
 {
     char name[35]; strcpy (name,piece.pieceName);
@@ -175,6 +187,8 @@ int nrPiesa(piesa &piece) //obtin numarul piesei extragand din nume nr ei
     return atoi(p);
     //cout << p << endl;
 }
+
+/* Denis */
 
 void matrici_piese() //completez matricile fiecare piese in functie de rotirea pe care o are
 {
@@ -196,6 +210,7 @@ void matrici_piese() //completez matricile fiecare piese in functie de rotirea p
     }
 }
 
+/* Denis */
 
 bool verificare_solutie(int x) // x va fi challenge-ul
 {
@@ -265,6 +280,8 @@ bool verificare_solutie(int x) // x va fi challenge-ul
     return true;
 }
 
+/* Denis */
+
 void salvare_info()
 {
     int index;
@@ -291,6 +308,8 @@ void salvare_info()
     afisez.flush();
     afisez.close();
 }
+
+/* Denis */
 
 int page;
 bool gameWon;
@@ -326,6 +345,8 @@ void drawBoard () {
         putimage(vCoord[i].x1, vCoord[i].y1, buffer[i], COPY_PUT);
 }
 
+/* Daniela */
+
 void drawPieces (piesa & movablePiece) {
     // se deseneaza din memorie piesele
     // cu exceptia celei pe care s a dat click
@@ -335,9 +356,8 @@ void drawPieces (piesa & movablePiece) {
 }
 
 /* Denis */
+
 void * vector_imagine[10];
-
-
 int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si returneaza cate elemente are challenge-ul pentru a le centra
 {
     char s_copie[100]; //facem copie pentru ca daca lucram pe s, dupa strtok s va deveni null
@@ -353,9 +373,13 @@ int redimensionare_img_ch(char s[]) //Functia primeste linia challenge-ului si r
     return i;
 }
 
+/* Daniela */
+
 struct dimensiuni{ //in acest struct vom pune pune coordonatele pieselor
     int a, b;
 }vect[9];
+
+/* Denis */
 
 int k = 0;
 int cont;
@@ -421,6 +445,8 @@ void afisare_challenge(int x, int y) // functia afiseaza dreptunghiul cu challen
 
 }
 
+/* Denis */
+
 void play_sound(int k)
 {
     if(k % 2 != 0)PlaySound("hes-a-pirate.wav", NULL, SND_FILENAME|SND_LOOP|SND_ASYNC);
@@ -461,6 +487,8 @@ void btn_snd()
     //cout << con_ant << " " << con << endl;
 }
 
+/* Denis */
+
 void *hint;
 void *hint_img;
 int f = 1, h = 1;
@@ -500,6 +528,8 @@ void hint_btn(int g)
     }
 }
 
+/* Denis */
+
 bool trans_inminn() //verific daca a trecut un minut de joc
 {   if(challengeNo > 16)
     {
@@ -513,6 +543,8 @@ bool trans_inminn() //verific daca a trecut un minut de joc
     return false;
 }
 
+/* Denis */
+
 bool clickonhint()
 {
     int x = mousex(), y = mousey();
@@ -520,6 +552,8 @@ bool clickonhint()
         return true;
     return false;
 }
+
+/* Denis */
 
 bool clickonsound()
 {
@@ -537,6 +571,8 @@ bool clickonsound()
 
 }
 
+/* Denis */
+
 bool clickonBACK()
 {
     int x = mousex(), y = mousey();
@@ -544,6 +580,8 @@ bool clickonBACK()
         return true;
     return false;
 }
+
+/* Daniela */
 
 void updatePage (int & page, piesa & piece) {
     setactivepage(page);
@@ -561,6 +599,8 @@ void updatePage (int & page, piesa & piece) {
     page++;
 }
 
+/* Denis si Daniela */
+
 void rotateImages(piesa &piece)
 {
     piece.rotatie++;
@@ -571,6 +611,8 @@ void rotateImages(piesa &piece)
     strcpy(piece.pieceName + 18, cifra);
     strcpy(piece.pieceName + 19, ".gif");
 }
+
+/* Daniela */
 
 void movePiece (piesa & piece) {
     int x = mousex(), y = mousey();
@@ -584,12 +626,16 @@ void movePiece (piesa & piece) {
     updatePage(page,piece);
 }
 
+/* Denis */
+
 bool clickonFinish()
 {
     int x = mousex(), y = mousey();
     if(x >= 370 && x <= 470 && y >= 544 && y <= 584) return true;
     return false;
 }
+
+/* Daniela */
 
 piesa & clickedOnPiece () {
     int x = mousex(), y = mousey();
@@ -649,6 +695,8 @@ std::string isPieceInSquare (piesa & piece) {
     return "notInSquare";
 }
 
+/* Daniela */
+
 void waitForMouseClick () {
     while (!ismouseclick(WM_LBUTTONDBLCLK) && !ismouseclick(WM_LBUTTONDOWN)
             && !ismouseclick(WM_RBUTTONDOWN)) {
@@ -660,6 +708,8 @@ void waitForMouseClick () {
         delay (100);
     }
 }
+
+/* Daniela */
 
 void mouseEvents () {
     bool pieceRotated;
@@ -724,7 +774,8 @@ void mouseEvents () {
                  else
                  {
                      cout << "MAI INCEARCA" << endl;
-                     readimagefile("./../resources/tryagain.gif", 750, 530, 880, 590);
+                     if(challengeNo < 17)readimagefile("./../resources/tryagain.gif", 750, 530, 880, 590); // au coordonate diferite pentru a nu se suprapune cu butonul de hint
+                     else readimagefile("./../resources/tryagain.gif", 750, 475, 880, 535);
                  }
             }
             else cout << "Nu sunt puse toate piesele pe tabla!" << endl;
@@ -753,6 +804,8 @@ void mouseEvents () {
     }
 }
 
+/* Daniela */
+
 void initializareValori () {
     // salvam coordonatele patratelor tablei
     patrate[0] = {195,65,405,275};
@@ -773,6 +826,8 @@ void initializareValori () {
     unit *= CLOCKS_PER_SEC;
     rt = 0; h = 1; //reinitializez pentru fiecare challenge valorile pentru hint
 }
+
+/* Daniela */
 
 void start_game (int level) {
     challengeNo = level;
